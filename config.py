@@ -1,6 +1,6 @@
 import os
 
-basedir = os.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
@@ -21,6 +21,10 @@ class Config(object):
     DATABASE_CONNECT_OPTIONS = {}
     # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
+
+    @staticmethod
+    def init_app(app):
+        pass
 
 
 class DevelopmentConfig(Config):
