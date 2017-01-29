@@ -12,7 +12,7 @@ class Config(object):
     operations using the other.
     :cvar CSRF_SESSION_KEY Use a secure, unique and absolutely secret key for signing the data.
     """
-    SECRET_KEY = os.environ.get()
+    SECRET_KEY = os.environ.get("SECRET_KEY")
     CSRF_ENABLE = True
     CSRF_SESSION_KEY = os.environ.get("CSRF_SESSION_KEY")
     DEBUG = False
