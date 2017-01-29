@@ -1,1 +1,1 @@
-from  flask_script import Server, Manager
+from flask_script import Server, Manager

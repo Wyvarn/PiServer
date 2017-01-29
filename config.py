@@ -19,7 +19,6 @@ class Config(object):
     CSRF_ENABLED = True
     THREADS_PER_PAGE = 2
     DATABASE_CONNECT_OPTIONS = {}
-    # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or 'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
 
     @staticmethod

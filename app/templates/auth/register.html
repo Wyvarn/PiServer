@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+   <div class="form-panel">
+        <div class="form-header">
+            <h1>Register Account</h1>
+        </div>
+        <div class="form-content">
+            <form name="register-form" method="post" action="{{ url_for('auth.register') }}">
+                {{ register_form.csrf_token }}
+                {{ register_form.hidden_tag() }}
+                <!--Full name-->
+                <div class="form-group">
+                    <label for="full_name">Full name</label>
+                    {{ register_form.full_name(required_="required") }}
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    {{ register_form.username(required_="required") }}
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    {{ register_form.password(required_="required") }}
+                </div>
+                <div class="form-group">
+                    <label for="verify_password">Confirm Password</label>
+                    {{ register_form.verify_password(required_="required") }}
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    {{ register_form.email(required_="required") }}
+                </div>
+                <div class="form-group">
+                    {{ register_form.register(class_="register-button") }}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
