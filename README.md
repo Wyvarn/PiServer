@@ -8,3 +8,17 @@
 
 Raspberry pi cloud
 
+Upload data directly to your hard drive!
+
+## Tests
+
+Running tests can be done with:
+
+``` sh
+$ python manage.py test
+```
+> Will run all the tests and print a coverage report
+
+The coverage reports will be printed to stdout and both HTML and XML reports will be generated.
+
+Enjoy!
