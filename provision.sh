@@ -17,12 +17,11 @@ sudo sed -i "/tty/!s/mesg n/tty -s \\&\\& mesg n/" /root/.profile
 
 apt-get update
 
-apt-get -y install erlang-nox
-echo 'deb http://www.rabbitmq.com/debian/ testing main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list
-wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key add -
-apt-get update
-apt-get install -y rabbitmq-server
-
+# apt-get -y install erlang-nox
+# echo 'deb http://www.rabbitmq.com/debian/ testing main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list
+# wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key add -
+# apt-get update
+# apt-get install -y rabbitmq-server
 
 echo ">>> Installing Node and NPM"
 sudo apt-get install -y npm
@@ -36,8 +35,8 @@ sudo apt-get install -y python-pip
 echo "Installing virtualenv"
 sudo pip install virtualenv
 
-echo ">>> Installing Nginx"
-sudo apt-get install -y nginx
+# echo ">>> Installing Nginx"
+# sudo apt-get install -y nginx
 
 echo ">>> Installing Git"
 sudo apt-get -y install git

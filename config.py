@@ -19,6 +19,8 @@ class Config(object):
     CSRF_ENABLED = True
     THREADS_PER_PAGE = 2
     DATABASE_CONNECT_OPTIONS = {}
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
     SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
 
     @staticmethod
