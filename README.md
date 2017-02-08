@@ -5,6 +5,7 @@
 [![CircleCI](https://circleci.com/gh/Wyvarn/uploader.svg?style=svg)](https://circleci.com/gh/Wyvarn/uploader)
 [![codecov](https://codecov.io/gh/Wyvarn/uploader/branch/master/graph/badge.svg)](https://codecov.io/gh/Wyvarn/uploader)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/7dd28ce2d89d414996e3245aff7e819d)](https://www.codacy.com/app/Quilliam/uploader?utm_source=github.com&utm_medium=referral&utm_content=Quilliam/uploader&utm_campaign=Badge_Coverage)
+[![Code Health](https://landscape.io/github/Wyvarn/uploader/master/landscape.svg?style=flat)](https://landscape.io/github/Wyvarn/uploader/master)
 
 Raspberry pi cloud
 
