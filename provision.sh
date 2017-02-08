@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# todo: add color, change echo colors
+
 echo "Setting Timezone & Locale to $3 & en_US.UTF-8"
 
 sudo ln -sf /usr/share/zoneinfo/$3 /etc/localtime
@@ -32,7 +34,7 @@ echo ">>> Installing pip"
 sudo apt-get install -y python3-pip
 sudo apt-get install -y python-pip
 
-echo "Installing virtualenv"
+echo ">>> Installing virtualenv"
 sudo pip install virtualenv
 
 # echo ">>> Installing Nginx"
