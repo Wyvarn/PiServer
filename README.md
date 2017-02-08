@@ -10,6 +10,30 @@ Raspberry pi cloud
 
 Upload data directly to your hard drive!
 
+## Running the app
+
+This application is best run in a VM, so please ensure you have [Vagrant](https://www.vagrantup.com/) installed. A VM is used to ensure there is a level playing field for all developers when running and creating the application.
+
+You will find a vagrant file and a provision script which will contain all necessary tools for the VM. The VM used is `ubuntu/trusty64`.
+
+``` sh
+$ vagrant up
+```
+> This starts up the VM and will automatially provision it.
+
+``` sh
+$ vagrant ssh
+```
+> logs you into the VM
+
+```
+$ cd /vagrant
+$ . venv/bin/activate
+```
+> get into the shared directory and activate the virtual environment
+
+And that is it, now you can run the application.
+
 ## Tests
 
 Running tests can be done with:
