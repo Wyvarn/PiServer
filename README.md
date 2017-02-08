@@ -26,13 +26,17 @@ $ vagrant ssh
 ```
 > logs you into the VM
 
-```
+``` sh
 $ cd /vagrant
 $ . venv/bin/activate
 ```
 > get into the shared directory and activate the virtual environment
 
 And that is it, now you can run the application.
+
+``` sh
+$ python manage.py runserver
+```
 
 ## Tests
 
