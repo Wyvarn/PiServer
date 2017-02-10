@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, func, ForeignKey, Boolean
+from sqlalchemy import Column, String, Integer, DateTime, func, ForeignKey, Boolean, event, DDL
 from sqlalchemy.orm import relationship
 from abc import ABCMeta, abstractmethod
 import uuid
@@ -41,7 +41,7 @@ class UserProfile(Base):
     :cvar last_name, user's last name
     :cvar full_name, user's full name, which will be a combination of first and last names
     :cvar email, the user's email address
-    :cvar whether the user has accepted the terms of service
+    :cvar accept_terms, whether the user has accepted the terms of service
     """
     __tablename__ = "user_profile"
     first_name = Column(String(255), nullable=False)
@@ -55,7 +55,7 @@ class UserProfile(Base):
                                                                             self.last_name, self.email)
 
 
-class UserAccount(db.Model):
+class UserAccount(db.Model, UserMixin):
     """
     User account table containing all sensitive account information, like passwords, username, etc
     :cvar uid, unique user id that will be auto-generated
@@ -81,7 +81,22 @@ class UserAccount(db.Model):
     confirmed_on = Column(DateTime, nullable=True)
 
     @property
+    def registered(self):
+        return self.registered_on
+
+    @registered.setter
+    def registered(self):
+        """
+        This sets the registered on attribute on the time that it is accessed using datetime.now()
+        """
+        self.registered_on = datetime.now()
+
+    @property
     def password(self):
+        """
+        This is a property and should not be directly accessed, This is to protect the user password
+        :return:
+        """
         raise AttributeError("password is not a readable attribute")
 
     @password.setter
@@ -167,4 +182,76 @@ class ExternalServiceAccount(db.Model):
         return Column(Integer, ForeignKey(UserProfile.id), primary_key=True)
 
 
-    
+class FacebookAccount(ExternalServiceAccount):
+    """
+    Facebook account details for the author
+    :cvar __tablename__: name of this table as represented in the database
+    :cvar facebook_id: Facebook id received from
+    """
+    __tablename__ = "facebook_account"
+    facebook_id = Column(String(100), nullable=True, unique=True)
+
+    def __init__(self, facebook_id, email, first_name, last_name):
+        super().__init__(email, first_name, last_name)
+        self.facebook_id = facebook_id
+
+
+class TwitterAccount(ExternalServiceAccount):
+    """
+    Twitter account table
+    :cvar __tablename__: table name as rep in database
+    :cvar twitter_id: The twitter id as set in Twitter, or as received from Twitter
+    """
+    __tablename__ = "twitter_account"
+    twitter_id = Column(String(100), nullable=True, unique=True)
+
+    def __init__(self, twitter_id, email, first_name, last_name):
+        super().__init__(email, first_name, last_name)
+        self.twitter_id = twitter_id
+
+
+class GoogleAccount(ExternalServiceAccount):
+    """
+    Google Account table
+    :cvar __tablename__: name of table in database
+    :cvar google_id: Google id as received from Google on registration
+    """
+    __tablename__ = "google_account"
+    google_id = Column(String(100), nullable=True, unique=True)
+
+    def __init__(self, google_id, email, first_name, last_name):
+        super().__init__(email, first_name, last_name)
+        self.google_id = google_id
+
+
+class AsyncOperationStatus(Base):
+    """
+    Dictionary table that stores 3 available statuses, pending, ok, error
+    """
+    __tablename__ = "async_operation_status"
+    code = Column("code", String(20), nullable=True)
+
+    def __repr__(self):
+        pass
+
+
+class AsyncOperation(Base):
+    """
+
+    """
+    __tablename__ = "async_operation"
+    async_operation_status_id = Column(Integer, ForeignKey(AsyncOperationStatus.id))
+    user_profile_id = Column(Integer, ForeignKey(UserProfile.id))
+
+    status = relationship("AsyncOperationStatus", foreign_keys=async_operation_status_id)
+    user_profile = relationship("UserProfile", foreign_keys=user_profile_id)
+
+    def __repr__(self):
+        return "AsyncOpsId:{}, User Profile Id:{}, Status:{}, Profile:{}".format(
+            self.async_operation_status_id, self.user_profile_id, self.status, self.user_profile)
+
+
+event.listen(
+    AsyncOperationStatus.__table__, "after_create",
+    DDL(""" INSERT INTO async_operation_status (id,code) VALUES(1,'pending'),(2, 'ok'),(3, 'error'); """)
+)
