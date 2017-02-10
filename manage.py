@@ -1,6 +1,7 @@
 from flask_script import Server, Manager, Shell
 import os
 from app import create_app
+from app.models import PiCloudUserAccount, PiCloudUserProfile
 
 cov = None
 if os.environ.get("FLASK_COVERAGE"):
@@ -27,7 +28,7 @@ def make_shell_context():
     :return: A dictionary with the variables that will be in the shell context
     :rtype: dict
     """
-    return dict(app=app)
+    return dict(app=app, PiCloudUserAccount=PiCloudUserAccount, PiCloudUserProfile=PiCloudUserProfile)
 
 
 # add the commands that will be used in the application

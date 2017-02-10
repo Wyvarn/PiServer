@@ -31,7 +31,7 @@ class Base(db.Model):
         pass
 
 
-class UserProfile(Base):
+class PiCloudUserProfile(Base):
     """
     This will contain the user profile which is the actual user information
     such as name, email, accept terms of service, timezone, etc
@@ -46,16 +46,28 @@ class UserProfile(Base):
     __tablename__ = "user_profile"
     first_name = Column(String(255), nullable=False)
     last_name = Column(String(255), nullable=False)
-    full_name = "{} {}".format(first_name, last_name)
     email = Column(String(500), nullable=False, unique=True)
     accept_terms = Column(Boolean, nullable=False, default=False)
+
+    def __init__(self, first_name, last_name, email, accept_terms=False):
+        """
+        Return a new UserProfile object
+        :param first_name: First name
+        :param last_name: user's last name
+        :param email: user's email
+        """
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.accept_terms = accept_terms
+        self.full_name = "{} {}".format(self.first_name, self.last_name)
 
     def __repr__(self):
         return "FullName: <FirstName: {}, LastName:{}>\n Email:{}\n".format(self.first_name,
                                                                             self.last_name, self.email)
 
 
-class UserAccount(db.Model, UserMixin):
+class PiCloudUserAccount(db.Model, UserMixin):
     """
     User account table containing all sensitive account information, like passwords, username, etc
     :cvar uid, unique user id that will be auto-generated
@@ -71,9 +83,10 @@ class UserAccount(db.Model, UserMixin):
     """
     __tablename__ = "user_account"
     uid = Column(String(250), default=str(uuid.uuid4()), nullable=False)
-    user_profile_id = Column(Integer, ForeignKey(UserProfile.id), primary_key=True)
-    username = Column(String(500), default=UserProfile.email, nullable=True, unique=True)
-    email = Column(String(500), default=UserProfile.email, nullable=False, unique=True, onupdate=UserProfile.email)
+    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id), primary_key=True)
+    username = Column(String(500), default=PiCloudUserProfile.email, nullable=True, unique=True)
+    email = Column(String(500), default=PiCloudUserProfile.email, nullable=False, unique=True,
+                   onupdate=PiCloudUserProfile.email)
     password_hash = Column(String(250), nullable=False)
     admin = Column(Boolean, nullable=True, default=False)
     registered_on = Column(DateTime, nullable=False)
@@ -142,10 +155,12 @@ def load_user(user_id):
     callback used to reload the user object from the user id stored in the session
     :param user_id: user id
     :return: User object stored in the session
-    :rtype: UserAccount
+    :rtype: PiCloudUserAccount
     """
-    return UserAccount.query.get(int(user_id))
+    return PiCloudUserAccount.query.get(int(user_id))
 
+
+# todo: add data metrics for checking who uploaded what when
 
 class ExternalServiceAccount(db.Model):
     """
@@ -179,7 +194,7 @@ class ExternalServiceAccount(db.Model):
         This is a declared attr, that will be used in all external accounts
         :return: UserAccount id that is a foreign and primary key
         """
-        return Column(Integer, ForeignKey(UserProfile.id), primary_key=True)
+        return Column(Integer, ForeignKey(PiCloudUserProfile.id), primary_key=True)
 
 
 class FacebookAccount(ExternalServiceAccount):
@@ -192,7 +207,7 @@ class FacebookAccount(ExternalServiceAccount):
     facebook_id = Column(String(100), nullable=True, unique=True)
 
     def __init__(self, facebook_id, email, first_name, last_name):
-        super().__init__(email, first_name, last_name)
+        super(FacebookAccount).__init__(email, first_name, last_name)
         self.facebook_id = facebook_id
 
 
@@ -206,7 +221,7 @@ class TwitterAccount(ExternalServiceAccount):
     twitter_id = Column(String(100), nullable=True, unique=True)
 
     def __init__(self, twitter_id, email, first_name, last_name):
-        super().__init__(email, first_name, last_name)
+        super(TwitterAccount).__init__(email, first_name, last_name)
         self.twitter_id = twitter_id
 
 
@@ -220,7 +235,7 @@ class GoogleAccount(ExternalServiceAccount):
     google_id = Column(String(100), nullable=True, unique=True)
 
     def __init__(self, google_id, email, first_name, last_name):
-        super().__init__(email, first_name, last_name)
+        super(GoogleAccount).__init__(email, first_name, last_name)
         self.google_id = google_id
 
 
@@ -232,7 +247,7 @@ class AsyncOperationStatus(Base):
     code = Column("code", String(20), nullable=True)
 
     def __repr__(self):
-        pass
+        return "Code: {}".format(self.code)
 
 
 class AsyncOperation(Base):
@@ -241,7 +256,7 @@ class AsyncOperation(Base):
     """
     __tablename__ = "async_operation"
     async_operation_status_id = Column(Integer, ForeignKey(AsyncOperationStatus.id))
-    user_profile_id = Column(Integer, ForeignKey(UserProfile.id))
+    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id))
 
     status = relationship("AsyncOperationStatus", foreign_keys=async_operation_status_id)
     user_profile = relationship("UserProfile", foreign_keys=user_profile_id)
