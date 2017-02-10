@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from abc import ABCMeta, abstractmethod
 import uuid
 from sqlalchemy.ext.declarative import declared_attr
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import db, login_manager
 from datetime import datetime
@@ -28,4 +29,28 @@ class Base(db.Model):
         :return: Human readable representaion of this object
         """
         pass
+
+
+class UserProfile(Base):
+    """
+    This will contain the user profile which is the actual user information
+    such as name, email, accept terms of service, timezone, etc
+    This will be the basic user profile
+    :cvar __tablename__ the table name that will appear in the database
+    :cvar first_name, the user's first name
+    :cvar last_name, user's last name
+    :cvar full_name, user's full name, which will be a combination of first and last names
+    :cvar email, the user's email address
+    :cvar whether the user has accepted the terms of service
+    """
+    __tablename__ = "user_profile"
+    first_name = Column(String(255), nullable=False)
+    last_name = Column(String(255), nullable=False)
+    full_name = "{} {}".format(first_name, last_name)
+    email = Column(String(500), nullable=False)
+    accept_terms = Column(Boolean, nullable=False, default=False)
+
+    def __repr__(self):
+        return "FullName: <FirstName: {}, LastName:{}>\n Email:{}\n".format(self.first_name,
+                                                                            self.last_name, self.email)
 
