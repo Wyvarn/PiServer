@@ -119,3 +119,52 @@ class UserAccount(db.Model):
                                                                          self.username, self.email,
                                                                          self.admin, self.registered_on,
                                                                          self.confirmed, self.confirmed_on)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """
+    callback used to reload the user object from the user id stored in the session
+    :param user_id: user id
+    :return: User object stored in the session
+    :rtype: UserAccount
+    """
+    return UserAccount.query.get(int(user_id))
+
+
+class ExternalServiceAccount(db.Model):
+    """
+    The external service account is an abstract class that will contain information relating to
+    external services such as Google Account, Facebook, Twitter, etc. This will be used to authenticate the
+    user with such accounts and enable them to login with either of those accounts. Once the user is logged
+    in then the relevant service account is updated and the UserAccount as well as UserProfiles will be
+    updated as well
+    """
+    __metaclass__ = ABCMeta
+    __abstract__ = True
+
+    first_name = Column(String(250), nullable=False)
+    last_name = Column(String(250), nullable=False)
+    email = Column(String(500), nullable=False)
+
+    def __init__(self, email, first_name, last_name):
+        """
+        Creates an ExternalServiceAccount object,
+        :param email: The user email obtained from external auth account
+        :param first_name: first name that will be returned from the authentication
+        :param last_name: last name of the user
+        """
+        self.email = email
+        self.first_name = first_name
+        self.last_name = last_name
+
+    @declared_attr
+    def user_profile_id(self):
+        """
+        This is a declared attr, that will be used in all external accounts
+        :return: UserAccount id that is a foreign and primary key
+        """
+        return Column(Integer, ForeignKey(UserProfile.id), primary_key=True)
+
+
+    
