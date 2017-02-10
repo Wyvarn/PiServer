@@ -37,13 +37,13 @@ manager.add_command("runserver", server)
 
 
 @manager.command
-def test(coverage=False):
+def test(cover=False):
     """
     Will run tests in the application. Will run both unit tests and functional tests
     and will create a coverage report
-    :param coverage variable will be set to False, this will be used to coverage reports
+    :param cover variable will be set to False, this will be used to coverage reports
     """
-    if coverage and not os.environ.get("FLASK_COVERAGE"):
+    if cover and not os.environ.get("FLASK_COVERAGE"):
         import sys
         os.environ['FLASK_COVERAGE'] = '1'
         os.execvp(sys.executable, [sys.executable] + sys.argv)
