@@ -1,8 +1,6 @@
 import unittest
 from tests import BaseTestCase
 from app.models import PiCloudUserAccount
-from datetime import datetime
-from flask_login import current_user
 from werkzeug.security import check_password_hash
 
 
