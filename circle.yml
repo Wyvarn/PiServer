@@ -9,3 +9,5 @@ dependencies:
 test:
   override:
     - python manage.py test
+    - python-codacy-coverage -r coverage.xml
+    - codecov

@@ -1,7 +1,8 @@
 from flask_script import Server, Manager, Shell
 import os
-from app import create_app
+from app import create_app, db
 from app.models import PiCloudUserAccount, PiCloudUserProfile
+from flask_migrate import MigrateCommand, Migrate
 
 cov = None
 if os.environ.get("FLASK_COVERAGE"):
@@ -18,6 +19,8 @@ app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
 # pass the application object to manager and create a manager instance, to enable running the application
 manager = Manager(app)
+migrate = Migrate(app, db)
+
 # set up a server to run at a specific port and host
 server = Server(host="127.0.0.1", port=5000)
 
@@ -35,6 +38,7 @@ def make_shell_context():
 # run these commands with python manage.py shell/runserver/etc...
 manager.add_command("shell", Shell(make_context=make_shell_context()))
 manager.add_command("runserver", server)
+manager.add_command("db", MigrateCommand)
 
 
 @manager.command

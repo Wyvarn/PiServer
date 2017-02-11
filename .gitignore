@@ -50,6 +50,8 @@ coverage.xml
 *,cover
 .hypothesis/
 
+migrations/
+
 # Translations
 *.mo
 *.pot
@@ -88,6 +90,7 @@ cleanup.sh
 # virtualenv
 .venv/
 venv/
+venv2/
 ENV/
 
 # Spyder project settings
