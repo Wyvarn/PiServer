@@ -10,7 +10,7 @@ class ModelTestCases(BaseTestCase):
         picloud_user = PiCloudUserAccount.query.filter_by(email='picloudman@picloud.com').first()
         self.assertFalse(picloud_user.verify_password('admin'))
         self.assertFalse(picloud_user.verify_password('another_admin'))
-        self.assertTrue(check_password_hash(picloud_user.get_password, "password"))
+        self.assertTrue(check_password_hash(picloud_user.get_password, "picloudman"))
         self.assertFalse(check_password_hash(picloud_user.get_password, "foobar"))
 
     # def test_validate_invalid_password(self):

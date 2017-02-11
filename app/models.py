@@ -83,7 +83,8 @@ class PiCloudUserAccount(db.Model, UserMixin):
     """
     __tablename__ = "user_account"
     uid = Column(String(250), default=str(uuid.uuid4()), nullable=False)
-    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id), primary_key=True)
+    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id), primary_key=True,
+                             autoincrement=True)
     username = Column(String(500), default=PiCloudUserProfile.email, nullable=True, unique=True)
     email = Column(String(500), default=PiCloudUserProfile.email, nullable=False, unique=True,
                    onupdate=PiCloudUserProfile.email)
@@ -108,7 +109,6 @@ class PiCloudUserAccount(db.Model, UserMixin):
     def password(self):
         """
         This is a property and should not be directly accessed, This is to protect the user password
-        :return:
         """
         raise AttributeError("password is not a readable attribute")
 
@@ -121,7 +121,7 @@ class PiCloudUserAccount(db.Model, UserMixin):
         self.password_hash = generate_password_hash(password)
 
     @password.getter
-    def password(self):
+    def get_password(self):
         """
         Getter password attribute to fetch the password, This will return the hashed password however
         At no point will the real password be revealed
@@ -259,7 +259,7 @@ class AsyncOperation(Base):
     user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id))
 
     status = relationship("AsyncOperationStatus", foreign_keys=async_operation_status_id)
-    user_profile = relationship("UserProfile", foreign_keys=user_profile_id)
+    user_profile = relationship("PiCloudUserProfile", foreign_keys=user_profile_id)
 
     def __repr__(self):
         return "AsyncOpsId:{}, User Profile Id:{}, Status:{}, Profile:{}".format(
