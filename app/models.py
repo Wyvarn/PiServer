@@ -26,7 +26,7 @@ class Base(db.Model):
     def __repr__(self):
         """
         Should return a human readable implementation of this object
-        :return: Human readable representaion of this object
+        :return: Human readable representation of this object
         """
         pass
 
