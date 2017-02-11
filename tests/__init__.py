@@ -42,12 +42,9 @@ class BaseTestCase(ContextTestCase):
     of course all this will be dummy
     """
 
-    def __init__(self):
-        pass
-
     def setUp(self):
-        self.app_context.push()
         self.app_context = self.app.app_context()
+        self.app_context.push()
         self.db = db
 
         db.create_all()
