@@ -53,3 +53,7 @@ class RecoverPasswordForm(FlaskForm):
     """
     Recover password form, or forgot password form
     """
+    email = StringField(validators=[DataRequired(), Email()])
+    send_mail_btn = SubmitField("RECOVER PASSWORD")
+
+# todo: add contact form

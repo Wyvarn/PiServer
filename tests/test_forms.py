@@ -7,6 +7,7 @@ class TestLoginForm(BaseTestCase):
     """
     Tests for login form
     """
+
     def test_correct_data_validates(self):
         """Test that the correct data is validated"""
         login_form = LoginForm(email="picloud_man@picloud.com", password="picloud_man")
@@ -65,6 +66,26 @@ class TestRegisterForm(BaseTestCase):
             email="picloud_man@picloud.com",
             password="piclould",
             verify_password="picl"
+        )
+        self.assertFalse(form.validate())
+
+
+class TestRecoverPassword(BaseTestCase):
+    """
+    Tests for recover password form
+    """
+
+    def test_validates_email(self):
+        """Test that the form validates the email input"""
+        form = RecoverPasswordForm(
+            email="picloud_man@picloud.com"
+        )
+        self.assertTrue(form.validate())
+
+    def test_validate_invalid_email(self):
+        """Test that the form does not submit if the email is not valid"""
+        form = RecoverPasswordForm(
+            email="picloud"
         )
         self.assertFalse(form.validate())
 
