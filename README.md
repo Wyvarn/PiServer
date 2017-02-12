@@ -1,4 +1,4 @@
-# uploader
+# PiCloud
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7dd28ce2d89d414996e3245aff7e819d)](https://www.codacy.com/app/Quilliam/PiCloud?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Wyvarn/PiCloud&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/Wyvarn/PiCloud.svg?branch=master)](https://travis-ci.org/Wyvarn/PiCloud)
@@ -7,9 +7,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/7dd28ce2d89d414996e3245aff7e819d)](https://www.codacy.com/app/Quilliam/PiCloud?utm_source=github.com&utm_medium=referral&utm_content=Wyvarn/PiCloud&utm_campaign=Badge_Coverage)
 [![Code Health](https://landscape.io/github/Wyvarn/uploader/master/landscape.svg?style=flat)](https://landscape.io/github/Wyvarn/uploader/master)
 
-Raspberry pi cloud
-
-Upload data directly to your hard drive!
+Upload data directly to your hard drive from wherever!
 
 ## Running the app
 

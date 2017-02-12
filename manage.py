@@ -19,7 +19,7 @@ app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
 # pass the application object to manager and create a manager instance, to enable running the application
 manager = Manager(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, directory="migrations")
 
 # set up a server to run at a specific port and host
 server = Server(host="127.0.0.1", port=5000)
