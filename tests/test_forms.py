@@ -28,6 +28,7 @@ class TestLoginForm(BaseTestCase):
         login_form = LoginForm(email="", password="picloud_man")
         self.assertFalse(login_form.validate())
 
+
 class TestRegisterForm(BaseTestCase):
     """
     Tests for RegisterForm
@@ -56,7 +57,7 @@ class TestRegisterForm(BaseTestCase):
         )
         self.assertFalse(form.validate())
 
-    def test_validate_email_already_registerd(self):
+    def test_validate_email_already_registered(self):
         """Test that register form does not validate an already registerd email address"""
         form = RegisterForm(
             first_name="picloud",
@@ -95,6 +96,13 @@ class TestRecoverPassword(BaseTestCase):
         """Test that the form does not submit if the email is not valid"""
         form = RecoverPasswordForm(
             email="picloud"
+        )
+        self.assertFalse(form.validate())
+
+    def test_validate_empty_email_input(self):
+        """Tests that the form does not validate and empty email field"""
+        form = RecoverPasswordForm(
+            email=""
         )
         self.assertFalse(form.validate())
 
