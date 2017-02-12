@@ -18,6 +18,15 @@ class TestLoginForm(BaseTestCase):
         login_form = LoginForm(email="picloud", password="picloud_mam")
         self.assertFalse(login_form.validate())
 
+    def test_validate_invalid_password_input(self):
+        """Test that form does not validate empty password field"""
+        login_form = LoginForm(email="picloud@picloud.com", password="")
+        self.assertFalse(login_form.validate())
+
+    def test_validate_empty_password_input(self):
+        """Tests that the form does not validate empty email input"""
+        login_form = LoginForm(email="", password="picloud_man")
+        self.assertFalse(login_form.validate())
 
 class TestRegisterForm(BaseTestCase):
     """
@@ -88,6 +97,7 @@ class TestRecoverPassword(BaseTestCase):
             email="picloud"
         )
         self.assertFalse(form.validate())
+
 
 if __name__ == '__main__':
     unittest.main()
