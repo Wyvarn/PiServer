@@ -65,11 +65,23 @@ def register():
                 db.session.add(picloud_user_profile)
                 db.session.commit()
 
-                # todo
+                # todo build the token
                 # build token and send an email for user confirmation
-    pass
+
+                # login the user
+                login_user(picloud_user_account)
+
+                # flash the message
+                flash(message="A confirmation email has been sent to {}".format(picloud_user_account.email),
+                      category="success")
+
+                # redirect unconfirmed users to the unconfirmed view
+                # return redirect(url_for(""))
+
+    return render_template("auth/login.html", register_form=register_form)
 
 
 @auth.route("/recover_password", methods=["POST", "GET"])
 def forgot_password():
+
     pass

@@ -93,6 +93,21 @@ class PiCloudUserAccount(db.Model, UserMixin):
     confirmed = Column(Boolean, nullable=False, default=False)
     confirmed_on = Column(DateTime, nullable=True)
 
+    def get_id(self):
+        """
+        Overriding id attribute to fetch this id
+        :return: the user profile id
+        """
+        return self.user_profile_id
+
+    # @property
+    # def is_authenticated(self):
+    #     """
+    #     checks if the user is authenticated. This is overridden to check if the user is confirmed
+    #     :return: whether the usr is confirmed or not
+    #     """
+    #     return self.confirmed
+
     @property
     def registered(self):
         return self.registered_on

@@ -15,17 +15,22 @@ class AuthTestCases(BaseTestCase):
             response = self.login()
 
             # check that there is a response
-            self.assertTrue(response.code == 200)
+            self.assertTrue(response.status_code == 200)
             self.assertTrue(current_user.is_active)
             self.assertTrue(current_user.is_authenticated)
 
     def test_author_registration(self):
         """Test that a new user registration behaves as expected"""
+        # todo: change redirects to True
         with self.client:
-            self.client.post('/register', data=dict(
-                email='picloudman@picloud.com',
-                password='password', confirm='password'
-            ), follow_redirects=True)
+            self.client.post(
+                'auth/register',
+                data=dict(
+                    email='picloudman@picloud.com',
+                    password='password', confirm='password'
+                ),
+                follow_redirects=False
+            )
             picloud_user = PiCloudUserAccount.query.filter_by(email='picloudman@picloud.com').first()
             self.assertTrue(picloud_user.id)
             self.assertTrue(picloud_user.email == 'picloucman@picloud.com')
