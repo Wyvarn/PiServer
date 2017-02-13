@@ -100,6 +100,14 @@ class PiCloudUserAccount(db.Model, UserMixin):
         """
         return self.user_profile_id
 
+    @property
+    def is_anonymous(self):
+        """
+        Anonymous users are not supported
+        :return: False
+        """
+        return False
+
     # @property
     # def is_authenticated(self):
     #     """

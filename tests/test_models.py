@@ -36,6 +36,11 @@ class ModelTestCases(BaseTestCase):
         user2 = PiCloudUserAccount(password='picloudman')
         self.assertTrue(picloud_user.password_hash != user2.password_hash)
 
+    def test_user_is_never_anonymous_(self):
+        """>>> Tests that the user is never anonymous"""
+        picloud_user = PiCloudUserAccount(password="picloudman")
+        self.assertFalse(picloud_user.is_anonymous)
+
 
 if __name__ == "__main__":
     unittest.main()
