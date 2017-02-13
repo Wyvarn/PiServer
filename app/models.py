@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, func, ForeignKey, Boolean, event, DDL
+from sqlalchemy import Column, String, Integer, DateTime, func, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from abc import ABCMeta, abstractmethod
 import uuid
@@ -39,7 +39,6 @@ class PiCloudUserProfile(Base):
     :cvar __tablename__ the table name that will appear in the database
     :cvar first_name, the user's first name
     :cvar last_name, user's last name
-    :cvar full_name, user's full name, which will be a combination of first and last names
     :cvar email, the user's email address
     :cvar accept_terms, whether the user has accepted the terms of service
     """
@@ -247,7 +246,7 @@ class AsyncOperationStatus(Base):
     code = Column("code", String(20), nullable=True)
 
     def __repr__(self):
-        return "Code: {}".format(self.code)
+        return "Id: {} Code: {}".format(self.id, self.code)
 
 
 class AsyncOperation(Base):
@@ -264,9 +263,3 @@ class AsyncOperation(Base):
     def __repr__(self):
         return "AsyncOpsId:{}, User Profile Id:{}, Status:{}, Profile:{}".format(
             self.async_operation_status_id, self.user_profile_id, self.status, self.user_profile)
-
-
-event.listen(
-    AsyncOperationStatus.__table__, "after_create",
-    DDL(""" INSERT INTO async_operation_status (id,code) VALUES(1,'pending'),(2, 'ok'),(3, 'error'); """)
-)

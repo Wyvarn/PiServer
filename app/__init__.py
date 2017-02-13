@@ -3,6 +3,7 @@ from config import config, Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from celery import Celery
+from app.models import AsyncOperationStatus
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -36,6 +37,7 @@ def create_app(config_name):
     # initialize the db
     db.init_app(app)
 
+    init_db(db)
     # register error pages and blueprints
     error_handlers(app)
     register_blueprints(app)
@@ -77,3 +79,27 @@ def register_blueprints(app):
     from app.mod_auth import auth
 
     app.register_blueprint(auth)
+
+
+def init_db(db):
+    """
+    Initializes the database with sensible defaults that will be used once the application is created
+    :param db: the database that is initialized with the application
+    """
+
+    # the values to insert into each row
+    async_ops_values = {
+        "row1": (1, "pending"),
+        "row2": (2, "ok"),
+        "row3": (3, "error")
+    }
+
+    for key, value in async_ops_values.items():
+        async_ops = AsyncOperationStatus.query.filter_by(id=value[0]).first()
+
+        # check if the value already exists, if not add to the database
+        if async_ops is None:
+            async_ops = AsyncOperationStatus(id=value[0], code=value[1])
+            db.session.add(async_ops)
+    db.session.commit()
+
