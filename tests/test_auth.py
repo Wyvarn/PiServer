@@ -1,12 +1,22 @@
 import unittest
 from datetime import datetime
 from flask_login import current_user
+from tests import BaseTestCase
 
 
-class AuthTestCases(unittest.TestCase):
+class AuthTestCases(BaseTestCase):
     """
     Auth test cases
     """
+    def test_login(self):
+        """Test that the correct login data logs in the user"""
+        with self.client:
+            response = self.login()
+
+            # check that there is a response
+            self.assertTrue(response.code == 200)
+            self.assertTrue(current_user.is_active)
+            self.assertTrue(current_user.is_authenticated)
 
     # def test_author_registration(self):
     #     """Test that a new Author registration behaves as expected"""
