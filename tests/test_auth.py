@@ -9,6 +9,10 @@ class AuthTestCases(BaseTestCase):
     """
     Auth test cases
     """
+
+    # def shortDescription(self):
+    #     return "{} tests for Authentication".format(AuthTestCases.__name__)
+
     def test_picloud_login(self):
         """>>> Test that the correct login data logs in the user"""
         with self.client:
