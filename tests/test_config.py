@@ -9,22 +9,23 @@ class TestConfigurationsCases(BaseTestCase):
     as the should under TESTING config
     """
     def test_app_is_testing(self):
-        """Test application can be configured for testing"""
+        """>>> Test application can be configured for testing"""
         self.assertTrue(current_app.config["TESTING"])
 
     def test_app_is_debuggable(self):
-        """Test application can be in debug mode"""
+        """>>> Test application can be in debug mode"""
         self.assertTrue(current_app.config.get("DEBUG") is True)
 
     def test_app_has_wsrf_enabled(self):
-        """Test application has WSRF disabled in testing mode"""
+        """>>> Test application has WSRF disabled in testing mode"""
         self.assertTrue(current_app.config.get("WTF_CSRF_ENABLED") is False)
 
     def test_app_has_database_url(self):
+        """>>> Test that the database url used for testing is sqlite:///:memory"""
         self.assertTrue(current_app.config.get("SQLALCHEMY_DATABASE_URI") == 'sqlite:///:memory:')
 
     def test_app_exists(self):
-        """Test that the application exists"""
+        """>>> Test that the application exists"""
         self.assertFalse(current_app is None)
 
 

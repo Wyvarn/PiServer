@@ -78,7 +78,7 @@ def register():
                 # redirect unconfirmed users to the unconfirmed view
                 # return redirect(url_for(""))
 
-    return render_template("auth/login.html", register_form=register_form)
+    return render_template("auth/register.html", register_form=register_form)
 
 
 @auth.route("/recover_password", methods=["POST", "GET"])

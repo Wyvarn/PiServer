@@ -9,8 +9,8 @@ class AuthTestCases(BaseTestCase):
     """
     Auth test cases
     """
-    def test_login(self):
-        """Test that the correct login data logs in the user"""
+    def test_picloud_login(self):
+        """>>> Test that the correct login data logs in the user"""
         with self.client:
             response = self.login()
 
@@ -19,42 +19,51 @@ class AuthTestCases(BaseTestCase):
             self.assertTrue(current_user.is_active)
             self.assertTrue(current_user.is_authenticated)
 
-    def test_author_registration(self):
-        """Test that a new user registration behaves as expected"""
+    def test_picloud_registration(self):
+        """>>> Test that a new user registration behaves as expected"""
         # todo: change redirects to True
         with self.client:
             self.client.post(
                 'auth/register',
                 data=dict(
                     email='picloudman@picloud.com',
-                    password='password', confirm='password'
+                    password='picloudman', confirm='picloudman'
                 ),
                 follow_redirects=False
             )
-            picloud_user = PiCloudUserAccount.query.filter_by(email='picloudman@picloud.com').first()
-            self.assertTrue(picloud_user.id)
-            self.assertTrue(picloud_user.email == 'picloucman@picloud.com')
-            self.assertFalse(picloud_user.admin)
 
-    # def test_get_author_by_id(self):
-    #     """Ensure that the id is correct for the current logged in user"""
+            picloud_user_account = PiCloudUserAccount.query.filter_by(email='picloudman@picloud.com').first()
+            self.assertTrue(picloud_user_account.get_id)
+            self.assertTrue(picloud_user_account.email == 'picloudman@picloud.com')
+            self.assertFalse(picloud_user_account.admin)
+
+    def test_get_picloud_user_by_id(self):
+        """>>> Ensure that the id is correct for the current logged in user"""
+        with self.client:
+            response = self.login()
+
+            self.assertTrue(current_user.user_profile_id == 1)
+            self.assertFalse(current_user.get_id == 20)
+
+    # todo: implement this test
+    # def test_validate_invalid_password(self):
+    #     """>>> Test to ensure user can not log in with an invalid password"""
     #     with self.client:
-    #         self.client.post("/login", data=dict(
-    #             email='guydemaupassant@hadithi.com',
-    #             password='password'
+    #         response = self.client.post("/login", data=dict(
+    #             email='picloudman@picloud.com',
+    #             password='picloudman'
     #         ), follow_redirects=True)
-    #         # self.assertTrue(current_user.id == 1)
-    #         # self.assertFalse(current_user.id == 20)
-    #
-    # def test_registered_on_defaults_to_datetime(self):
-    #     """Ensure that the registered_on date is a datetime object"""
-    #     with self.client:
-    #         self.client.post('/login', data=dict(
-    #             email='guydemaupassant@hadithi.com',
-    #             password='password'
-    #         ), follow_redirects=True)
-    #         author = AuthorAccount.query.filter_by(email='guydemaupassant@hadithi.com').first()
-    #         self.assertIsInstance(author.registered_on, datetime)
+    #         # self.assertIn(b"Invalid email and/or password", response.data)
+
+    def test_registered_on_defaults_to_datetime(self):
+        """>>> Ensure that the registered_on date is a datetime object"""
+        with self.client:
+            self.client.post('auth/login', data=dict(
+                email='picloudman@picloud.com',
+                password='picloudman'
+            ), follow_redirects=True)
+            picloud_account = PiCloudUserAccount.query.filter_by(email='picloudman@picloud.com').first()
+            self.assertIsInstance(picloud_account.registered_on, datetime)
 
 
 if __name__ == '__main__':
