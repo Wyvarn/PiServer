@@ -8,7 +8,7 @@ dependencies:
 
 test:
   override:
-    - python manage.py init_async_values
+    # - python manage.py init_async_values
     - python manage.py test
     - python-codacy-coverage -r coverage.xml
     - codecov
