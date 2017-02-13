@@ -1,7 +1,8 @@
 from flask_script import Server, Manager, Shell
 import os
 from app import create_app, db
-from app.models import PiCloudUserAccount, PiCloudUserProfile
+from app.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation,\
+    GoogleAccount, FacebookAccount, TwitterAccount
 from flask_migrate import MigrateCommand, Migrate
 
 cov = None
@@ -31,7 +32,17 @@ def make_shell_context():
     :return: A dictionary with the variables that will be in the shell context
     :rtype: dict
     """
-    return dict(app=app, PiCloudUserAccount=PiCloudUserAccount, PiCloudUserProfile=PiCloudUserProfile)
+    return dict(
+        app=app,
+        db=db,
+        PiCloudUserAccount=PiCloudUserAccount,
+        PiCloudUserProfile=PiCloudUserProfile,
+        AsyncOperationStatus=AsyncOperationStatus,
+        AsyncOperation=AsyncOperation,
+        GoogleAccount=GoogleAccount,
+        FacebookAccount=FacebookAccount,
+        TwitterAccount=TwitterAccount
+    )
 
 
 # add the commands that will be used in the application
@@ -77,6 +88,31 @@ def test(cover=False):
         print('HTML version: file://%s/index.html' % covdir)
         print("XML version: file://%s" % basedir)
         cov.erase()
+
+
+@manager.command
+def init_async_values():
+    """
+    Initializes the database with sensible defaults that will be used once the application is created
+    """
+
+    # the values to insert into each row
+    async_ops_values = {
+        "row1": (1, "pending"),
+        "row2": (2, "ok"),
+        "row3": (3, "error")
+    }
+
+    print("Adding Async Operation Status values")
+    for key, value in async_ops_values.items():
+        async_ops = AsyncOperationStatus.query.filter_by(id=value[0]).first()
+
+        # check if the value already exists, if not add to the database
+        if async_ops is None:
+            async_ops = AsyncOperationStatus(id=value[0], code=value[1])
+            db.session.add(async_ops)
+    db.session.commit()
+    print("Done...")
 
 
 if __name__ == "__main__":
