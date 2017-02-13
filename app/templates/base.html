@@ -8,25 +8,8 @@
             <button id="menu-toggle" class="menu-toggle"><span>Menu</span></button>
 			<div id="theSidebar" class="sidebar">
 				<button class="close-button fa fa-fw fa-close"></button>
-				<!--todo: put logo-->
-				<h1>
-                    <span id="site-title"><a href="{{ url_for('home.home') }}">Hadithi</a></span>
-					<span class="tag">Tales from Africa</span>
-				</h1>
 				<div class="related">
-					{% if user.is_authenticated and user.confirmed %}
-                        Hello {{ user.full_name }}
-                        <a href="{{ url_for('dashboard.user_dashboard', username=user.full_name)}}">Dashboard</a>
-                        <a href="#">Account</a>
-						<a href="{{ url_for('auth.logout') }}">Logout</a>
-				  {% elif user.is_authenticated %}
-						<a href="{{ url_for('dashboard.unconfirmed') }}">Confirm</a>
-						<a href="{{ url_for('auth.logout') }}">Logout</a>
-					{% else %}
-						<a href="{{ url_for('auth.login') }}">Login</a>
-					{% endif %}
-					<a href="{{ url_for('home.contact') }}">Contact</a>
-					<a href="{{ url_for('home.about') }}">About</a>
+					<a href="{{ url_for('auth.login') }}">Login</a>
 				</div>
 			</div>
             <div id="theGrid" class="main">

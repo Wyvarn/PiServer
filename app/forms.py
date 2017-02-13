@@ -29,6 +29,7 @@ class RegisterForm(FlaskForm):
                                          EqualTo("verify_password", message="Passwords must match"),
                                          Length(min=8, max=15)])
     verify_password = PasswordField(validators=[DataRequired()])
+    accept_terms = BooleanField()
     register_button = SubmitField("REGISTER")
 
     def validate_form(self):

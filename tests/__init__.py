@@ -89,10 +89,14 @@ class BaseTestCase(ContextTestCase):
         Login in the user to the testing app
         :return: The authenticated user for the test app
         """
+        # todo, change follow_redirects to TRUE
         return self.client.post(
-            url_for("auth.login"),
-            data=dict(email='picloudman@picloud.com', password='picloudman', confirm='picloudman'),
-            follow_redirects=True
+            "auth/login",
+            data=dict(
+                email='picloudman@picloud.com',
+                password='picloudman',
+            ),
+            follow_redirects=False
         )
 
     # todo: add dummy adding file and dummy downloading file
