@@ -75,6 +75,8 @@ def register_blueprints(app):
     :param app: Current flask application object
     """
     from app.mod_auth import auth
+    from app.mod_home import home
 
     app.register_blueprint(auth)
+    app.register_blueprint(home)
 

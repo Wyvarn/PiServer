@@ -1,7 +1,8 @@
 from flask_script import Server, Manager, Shell
 import os
+from datetime import datetime
 from app import create_app, db
-from app.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation,\
+from app.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation, \
     GoogleAccount, FacebookAccount, TwitterAccount
 from flask_migrate import MigrateCommand, Migrate
 
@@ -114,6 +115,22 @@ def init_async_values():
     db.session.commit()
     print("Done...")
 
+
+@manager.command
+def create_admin():
+    """
+    manager command to create an admin
+    """
+    picloud_profile = PiCloudUserProfile(first_name="picloud", last_name="admin",
+                                         email="picloudadmin@picloud.com", accept_terms=True)
+
+    piclouduser_account = PiCloudUserAccount(username="picloud", email=picloud_profile.email,
+                                             password="picloudman", registered_on=datetime.now(),
+                                             admin=True, confirmed=True, confirmed_on=datetime.now())
+
+    db.session.add(picloud_profile)
+    db.session.add(piclouduser_account)
+    db.session.commit()
 
 if __name__ == "__main__":
     manager.run()
