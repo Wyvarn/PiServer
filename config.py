@@ -25,6 +25,18 @@ class Config(object):
     SECURITY_PASSWORD_SALT = os.environ["SECURITY_PASSWORD_SALT"]
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # mail settings
+    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+
+    # gmail authentication
+    MAIL_USERNAME = os.environ['APP_MAIL_USERNAME']
+    MAIL_PASSWORD = os.environ['APP_MAIL_PASSWORD']
+
+    MAIL_DEFAULT_SENDER = os.environ["MAIL_DEFAULT_SENDER"]
+
     @staticmethod
     def init_app(app):
         pass
