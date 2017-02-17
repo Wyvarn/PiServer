@@ -22,6 +22,7 @@ class Config(object):
     CELERY_BROKER_URL = os.environ.get("REDIS_SERVER_URL")
     CELERY_RESULT_BACKEND = os.environ.get("REDIS_SERVER_URL")
     SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
+    SECURITY_PASSWORD_SALT = os.environ["SECURITY_PASSWORD_SALT"]
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod
