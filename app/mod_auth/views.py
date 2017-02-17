@@ -5,6 +5,7 @@ from app import db
 from flask_login import login_user, login_required, current_user, logout_user
 from app.models import PiCloudUserAccount, PiCloudUserProfile
 from app.forms import LoginForm, RegisterForm, RecoverPasswordForm
+from app.mod_auth.tokens import generate_confirmation_token, confirm_token
 
 
 @auth.route('/login', methods=["POST", "GET"])
@@ -66,8 +67,9 @@ def register():
                 db.session.add(picloud_user_profile)
                 db.session.commit()
 
-                # todo build the token
+
                 # build token and send an email for user confirmation
+                token = generate_confirmation_token(picloud_user_profile.email)
 
                 # login the user
                 login_user(picloud_user_account)
@@ -86,4 +88,48 @@ def register():
 def forgot_password():
 
     pass
+
+
+@auth.route("/confirm/<token>")
+@login_required
+def confirm_email(token):
+    """
+    Route to confirm user email. Checks if the user's token is valid and their account is valid.
+    If the user is already confirmed, redirect them to login to their account
+    If the token checks out and the email is extracted from the token successfully, we get the user details
+    from the database and update the confirmed column to True and set the date the confirmation took place
+
+    :param token: token generated in user registration
+    :return: a redirect to login.
+    """
+
+    # if the current user is already confirmed, redirect them to login
+    if current_user.confirmed:
+        flash(message="Account already confirmed. Please login", category="success")
+        return redirect(url_for("auth.login"))
+
+    # extract the email from the token, this will either bring back false or the email address
+    email = confirm_token(token)
+
+    # get the user by their email
+    picloud_user = PiCloudUserProfile.query.filter_by(email=current_user.email).first_or_404()
+
+    # if the email is not valid
+    if not email:
+        flash(message="The confirmation link has expired or is invalid", category="error")
+    # if the email matches the current user's email
+    elif picloud_user.email == email:
+        picloud_user.confirmed = True
+        picloud_user.confirmed_on = datetime.now()
+
+        db.session.add(picloud_user)
+        db.session.commit()
+
+        flash(message="You have confirmed your account, thank you", category="success")
+
+        return redirect(url_for("auth.login"))
+    return redirect(url_for("auth.login"))
+
+
+
 
