@@ -3,11 +3,14 @@ from config import config, Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from celery import Celery
+from flask_mail import Mail
+
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "auth.login"
 db = SQLAlchemy()
+mail = Mail()
 
 # create global instance of celery and delay its configuration until create_app is initialized
 celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
@@ -35,6 +38,9 @@ def create_app(config_name):
 
     # initialize the db
     db.init_app(app)
+
+    # initialize flask mail
+    mail.init_app(app)
 
     # register error pages and blueprints
     error_handlers(app)
