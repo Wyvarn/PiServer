@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from . import db, login_manager
 from datetime import datetime
+from json import loads
 
 
 class Base(db.Model):
@@ -61,6 +62,28 @@ class PiCloudUserProfile(Base):
         self.accept_terms = accept_terms
         self.full_name = "{} {}".format(self.first_name, self.last_name)
 
+    def from_json(self, user_profile):
+        """
+        initializes the class variables with values from json file
+        :param user_profile: user profile in json format
+        """
+        user = loads(user_profile)
+        self.first_name = user["first_name"]
+        self.last_name = user["last_name"]
+        self.email = user["email"]
+        self.accept_terms = user["accept_terms"]
+        self.full_name = "{} {}".format(self.first_name, self.last_name)
+
+    def to_json(self):
+        """
+        creates a dictionary from the class variables, can be used to create a json file
+        :return: a dictionary with the user data
+        :rtype: dict
+        """
+        return dict(
+            id=self.id,
+        )
+
     def __repr__(self):
         return "FullName: <FirstName: {}, LastName:{}>\n Email:{}\n".format(self.first_name,
                                                                             self.last_name, self.email)
@@ -82,8 +105,6 @@ class PiCloudUserAccount(db.Model, UserMixin):
     """
     __tablename__ = "user_account"
     uid = Column(String(250), default=str(uuid.uuid4()), nullable=False)
-    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id), primary_key=True,
-                             autoincrement=True)
     username = Column(String(500), default=PiCloudUserProfile.email, nullable=True, unique=True)
     email = Column(String(500), default=PiCloudUserProfile.email, nullable=False, unique=True,
                    onupdate=PiCloudUserProfile.email)
@@ -92,6 +113,9 @@ class PiCloudUserAccount(db.Model, UserMixin):
     registered_on = Column(DateTime, nullable=False)
     confirmed = Column(Boolean, nullable=False, default=False)
     confirmed_on = Column(DateTime, nullable=True)
+
+    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id))
+    user_profile = relationship(PiCloudUserProfile)
 
     def get_id(self):
         """
@@ -107,14 +131,6 @@ class PiCloudUserAccount(db.Model, UserMixin):
         :return: False
         """
         return False
-
-    # @property
-    # def is_authenticated(self):
-    #     """
-    #     checks if the user is authenticated. This is overridden to check if the user is confirmed
-    #     :return: whether the usr is confirmed or not
-    #     """
-    #     return self.confirmed
 
     @property
     def registered(self):
@@ -158,6 +174,35 @@ class PiCloudUserAccount(db.Model, UserMixin):
         :return:
         """
         return check_password_hash(self.password_hash, password)
+
+    # todo: create tests for json 'converters'
+    def from_json(self, picluod_user_account):
+        """
+        Takes in a JSON object, loads it and initializes class variables
+        This will enable creating the database directly from the front end through communication with an
+        API
+        :param picluod_user_account: the user account in JSON format
+        """
+        user_account = loads(picluod_user_account)
+
+        self.username = user_account["username"]
+        self.email = user_account["email"]
+        self.password_hash = user_account["password"]
+        self.registered_on = user_account["registered_on"]
+        self.confirmed = user_account["confirmed"]
+        self.confirmed_on = user_account["confirmed_on"]
+
+    def to_json(self):
+        """
+        Converts the model variables to a dict which can be transferred to a front end client
+        or used to create a json file for analytics
+        :return: a dictionary with user details
+        :rtype: dict
+        """
+        return dict(
+            uuid=self.uuid, username=self.username, email=self.email, registered_on=self.registered_on,
+            confirmed=self.confirmed, confirmed_on=self.confirmed_on
+        )
 
     def __repr__(self):
         """
