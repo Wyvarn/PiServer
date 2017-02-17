@@ -81,7 +81,8 @@ class PiCloudUserProfile(Base):
         :rtype: dict
         """
         return dict(
-            id=self.id,
+            id=self.id, first_name=self.first_name, last_name=self.last_name, email=self.email,
+            accept_terms=self.accept_terms
         )
 
     def __repr__(self):
@@ -114,6 +115,7 @@ class PiCloudUserAccount(db.Model, UserMixin):
     confirmed = Column(Boolean, nullable=False, default=False)
     confirmed_on = Column(DateTime, nullable=True)
 
+    user_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id))
     user_profile = relationship(PiCloudUserProfile)
 
