@@ -82,7 +82,8 @@ def register_blueprints(app):
     """
     from app.mod_auth import auth
     from app.mod_home import home
+    from app.mod_dashboard import dashboard
 
     app.register_blueprint(auth)
     app.register_blueprint(home)
-
+    app.register_blueprint(dashboard)
