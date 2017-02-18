@@ -6,6 +6,7 @@ from flask_login import login_user, login_required, current_user, logout_user
 from app.models import PiCloudUserAccount, PiCloudUserProfile
 from app.forms import LoginForm, RegisterForm, RecoverPasswordForm
 from app.mod_auth.tokens import generate_confirmation_token, confirm_token
+from app.mod_auth.email import send_mail
 
 
 @auth.route('/login', methods=["POST", "GET"])
@@ -63,13 +64,23 @@ def register():
                                                           registered_on=datetime.now(),
                                                           confirmed=False)
 
+                # add to db session and commit
                 db.session.add(picloud_user_account)
                 db.session.add(picloud_user_profile)
                 db.session.commit()
 
-
                 # build token and send an email for user confirmation
                 token = generate_confirmation_token(picloud_user_profile.email)
+
+                # _external adds the full url that includes the hostname and port
+                confirm_url = url_for("auth.confirm_email", token=token, _external=True)
+
+                # build the message
+                html = render_template("auth/confirm_email.html", confirm_url=confirm_url)
+                subject = "Please confirm you email"
+
+                # send the user an email
+                send_mail(picloud_user_profile.email, subject, html)
 
                 # login the user
                 login_user(picloud_user_account)
@@ -79,14 +90,13 @@ def register():
                       category="success")
 
                 # redirect unconfirmed users to the unconfirmed view
-                # return redirect(url_for(""))
+                # return redirect(url_for("dasboard.unconfirmed"))
 
     return render_template("auth/register.html", register_form=register_form)
 
 
 @auth.route("/recover_password", methods=["POST", "GET"])
 def forgot_password():
-
     pass
 
 
@@ -129,7 +139,3 @@ def confirm_email(token):
 
         return redirect(url_for("auth.login"))
     return redirect(url_for("auth.login"))
-
-
-
-
