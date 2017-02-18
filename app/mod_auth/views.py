@@ -89,14 +89,16 @@ def register():
                 flash(message="A confirmation email has been sent to {}".format(picloud_user_account.email),
                       category="success")
 
-                # redirect unconfirmed users to the unconfirmed view
+                # todo: redirect unconfirmed users to the unconfirmed view
                 # return redirect(url_for("dasboard.unconfirmed"))
 
     return render_template("auth/register.html", register_form=register_form)
 
 
+# todo: forgot password view and add tests
 @auth.route("/recover_password", methods=["POST", "GET"])
 def forgot_password():
+
     pass
 
 
@@ -139,3 +141,14 @@ def confirm_email(token):
 
         return redirect(url_for("auth.login"))
     return redirect(url_for("auth.login"))
+
+
+@auth.route("/logout")
+@login_required
+def logout():
+    """
+    Logout view which logs out the user from the application and redirects to home page
+    :return: redirect to home page
+    """
+    logout_user()
+    return redirect(url_for("home.home"))
