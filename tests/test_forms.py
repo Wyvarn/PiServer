@@ -106,6 +106,16 @@ class TestRecoverPassword(BaseTestCase):
         )
         self.assertFalse(form.validate())
 
+    def test_validate_email_non_existent(self):
+        """>>> Test that recover password form does not validate a non existent email address"""
+        form = RecoverPasswordForm(email="picloud_man@picloud.com")
+        self.assertFalse(form.validate_form())
+
+    def test_validate_email_exists(self):
+        """>>> Test that recover password form validates an existent email address"""
+        form = RecoverPasswordForm(email="picloudman@picloud.com")
+        self.assertTrue(form.validate_form())
+
 
 if __name__ == '__main__':
     unittest.main()

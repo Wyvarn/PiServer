@@ -57,4 +57,20 @@ class RecoverPasswordForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
     send_mail_btn = SubmitField("RECOVER PASSWORD")
 
+    def validate_form(self):
+        """
+        validates the form with the entered email to check if this email is in the db
+        :return: Boolean value whether this form exists in the db or not
+        """
+        initial_validation = super(RecoverPasswordForm, self).validate()
+        if not initial_validation:
+            return False
+        # query for the user if the email exists in the account
+        user = PiCloudUserAccount.query.filter_by(email=self.email.data).first()
+        if user:
+            return True
+        # if the email is None, return false and append errors
+        self.email.errors.append("Email does not exist")
+        return False
+
 # todo: add contact form

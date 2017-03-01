@@ -13,7 +13,7 @@ from app.mod_auth.email import send_mail
 def login():
     """
     Login route/view to be accessed at auth/login route
-    :return:
+    :return: a login view
     """
     login_form = LoginForm(request.form)
     if request.method == "POST":
@@ -99,7 +99,13 @@ def register():
 # todo: forgot password view and add tests
 @auth.route("/recover_password", methods=["POST", "GET"])
 def forgot_password():
-
+    """
+    View function for recovery passwords. This is accessed when a user clicks on forgot password
+    and is redirected to a form to allow them to change their passwords based on the email provided
+    will check if the email exists in
+    :return: forgot password view
+    """
+    
     pass
 
 
