@@ -105,7 +105,7 @@ def forgot_password():
     will check if the email exists in
     :return: forgot password view
     """
-    
+
     pass
 
 
