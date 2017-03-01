@@ -24,7 +24,7 @@ manager = Manager(app)
 migrate = Migrate(app, db, directory="migrations")
 
 # set up a server to run at a specific port and host
-server = Server(host="127.0.0.1", port=5000)
+server = Server(host="0.0.0.0", port=5000)
 
 
 def make_shell_context():

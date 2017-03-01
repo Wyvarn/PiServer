@@ -106,9 +106,8 @@ class PiCloudUserAccount(db.Model, UserMixin):
     """
     __tablename__ = "user_account"
     uid = Column(String(250), default=str(uuid.uuid4()), nullable=False)
-    username = Column(String(500), default=PiCloudUserProfile.email, nullable=True, unique=True)
-    email = Column(String(500), default=PiCloudUserProfile.email, nullable=False, unique=True,
-                   onupdate=PiCloudUserProfile.email)
+    username = Column(String(500), nullable=True, unique=True)
+    email = Column(String(500), nullable=False, unique=True)
     password_hash = Column(String(250), nullable=False)
     admin = Column(Boolean, nullable=True, default=False)
     registered_on = Column(DateTime, nullable=False)
@@ -116,7 +115,7 @@ class PiCloudUserAccount(db.Model, UserMixin):
     confirmed_on = Column(DateTime, nullable=True)
 
     user_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
-    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id))
+    user_profile_id = Column(Integer, ForeignKey("user_profile.id"))
     user_profile = relationship(PiCloudUserProfile)
 
     def get_id(self):
@@ -263,7 +262,7 @@ class ExternalServiceAccount(db.Model):
         This is a declared attr, that will be used in all external accounts
         :return: UserAccount id that is a foreign and primary key
         """
-        return Column(Integer, ForeignKey(PiCloudUserProfile.id), primary_key=True)
+        return Column(Integer, ForeignKey("user_profile.id"), primary_key=True)
 
 
 class FacebookAccount(ExternalServiceAccount):
@@ -324,8 +323,8 @@ class AsyncOperation(Base):
 
     """
     __tablename__ = "async_operation"
-    async_operation_status_id = Column(Integer, ForeignKey(AsyncOperationStatus.id))
-    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id))
+    async_operation_status_id = Column(Integer, ForeignKey("async_operation_status.id"))
+    user_profile_id = Column(Integer, ForeignKey("user_profile.id"))
 
     status = relationship("AsyncOperationStatus", foreign_keys=async_operation_status_id)
     user_profile = relationship("PiCloudUserProfile", foreign_keys=user_profile_id)

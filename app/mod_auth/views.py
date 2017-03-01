@@ -61,6 +61,8 @@ def register():
                                                           email=register_form.email.data,
                                                           accept_terms=register_form.accept_terms.data)
                 picloud_user_account = PiCloudUserAccount(password_hash=register_form.password.data,
+                                                          email=register_form.email.data,
+                                                          username=register_form.email.data,
                                                           registered_on=datetime.now(),
                                                           confirmed=False)
                 # add to db session and commit

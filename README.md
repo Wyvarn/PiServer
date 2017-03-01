@@ -5,7 +5,7 @@
 [![CircleCI](https://circleci.com/gh/Wyvarn/PiCloud.svg?style=svg)](https://circleci.com/gh/Wyvarn/PiCloud)
 [![codecov](https://codecov.io/gh/Wyvarn/PiCloud/branch/master/graph/badge.svg)](https://codecov.io/gh/Wyvarn/PiCloud)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/7dd28ce2d89d414996e3245aff7e819d)](https://www.codacy.com/app/Quilliam/PiCloud?utm_source=github.com&utm_medium=referral&utm_content=Wyvarn/PiCloud&utm_campaign=Badge_Coverage)
-[![Code Health](https://landscape.io/github/Wyvarn/uploader/master/landscape.svg?style=flat)](https://landscape.io/github/Wyvarn/uploader/master)
+[![Code Health](https://landscape.io/github/Wyvarn/PiCloud/master/landscape.svg?style=flat)](https://landscape.io/github/Wyvarn/PiCloud/master)
 
 Upload data directly to your hard drive from wherever!
 
