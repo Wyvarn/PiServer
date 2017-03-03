@@ -5,7 +5,7 @@ from app import db
 from flask_login import login_user, login_required, current_user, logout_user
 from app.models import PiCloudUserAccount, PiCloudUserProfile
 from app.forms import LoginForm, RegisterForm, RecoverPasswordForm
-from app.mod_auth.tokens import generate_confirmation_token, confirm_token
+from app.mod_auth.tokens import generate_token, confirm_token
 from app.mod_auth.email import send_mail
 
 
@@ -71,7 +71,7 @@ def register():
                 db.session.commit()
 
                 # build token and send an email for user confirmation
-                token = generate_confirmation_token(picloud_user_profile.email)
+                token = generate_token(picloud_user_profile.email)
 
                 # _external adds the full url that includes the hostname and port
                 confirm_url = url_for("auth.confirm_email", token=token, _external=True)
@@ -91,7 +91,7 @@ def register():
                       category="success")
 
                 # todo: redirect unconfirmed users to the unconfirmed view
-                # return redirect(url_for("dasboard.unconfirmed"))
+                # return redirect(url_for("dashboard.unconfirmed"))
 
     return render_template("auth/register.html", register_form=register_form)
 
@@ -102,11 +102,37 @@ def forgot_password():
     """
     View function for recovery passwords. This is accessed when a user clicks on forgot password
     and is redirected to a form to allow them to change their passwords based on the email provided
-    will check if the email exists in
+    will check if the email exists in the database and send a token for recover of password
     :return: forgot password view
     """
+    recover_password_form = RecoverPasswordForm(request.form)
+    # if request is post
+    if request.method == "POST":
+        # if the form is valid on submission and the user email exists in the db
+        if recover_password_form.validate_on_submit() and recover_password_form.validate_form():
+            # get their email address
+            email = recover_password_form.email.data
 
-    pass
+            # create token
+            token = generate_token(email)
+
+            # create a recover password url
+            recover_pass_url = url_for("auth.recover_password", token=token, _external=True)
+
+            # build the message
+            html = render_template("auth/recover_pass_msg.html", recover_pass_url=recover_pass_url)
+            subject = "PiCloud password recovery"
+
+            # send the user an email
+            send_mail(to=email, subject=subject, template=html)
+
+            # flash a message that the message has been sent to their email
+            flash(message="A recovery password link has been sent to {}".format(email),
+                  category="success")
+
+            # redirect to home page
+            return redirect(url_for("home.index"))
+    return render_template("auth/recover_password.html", recover_password_form=recover_password_form)
 
 
 @auth.route("/confirm/<token>")

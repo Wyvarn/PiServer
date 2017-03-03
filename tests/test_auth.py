@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_login import current_user
 from tests import BaseTestCase
 from app.models import PiCloudUserAccount, PiCloudUserProfile
-from app.mod_auth.tokens import generate_confirmation_token, confirm_token
+from app.mod_auth.tokens import generate_token, confirm_token
 from app import db
 
 
@@ -109,7 +109,7 @@ class AuthTestCases(BaseTestCase):
         with self.client:
             response = self.login()
 
-            token = generate_confirmation_token(email="picloudman@picloud.com")
+            token = generate_token(email="picloudman@picloud.com")
             response = self.client.get("auth/confirm/" + token, follow_redirects=True)
 
             # todo assertion of templates and add tests for flashing once templates are configured
@@ -127,7 +127,7 @@ class AuthTestCases(BaseTestCase):
     @unittest.skip
     def test_confirm_token_route_invalid_token(self):
         """>>> Test that ensures user can not register with an invalid token"""
-        token = generate_confirmation_token(email="picloudman@picloud.com")
+        token = generate_token(email="picloudman@picloud.com")
         with self.client:
             self.login()
             response = self.client.get('auth/confirm/' + token, follow_redirects=True)
@@ -146,7 +146,7 @@ class AuthTestCases(BaseTestCase):
         db.session.add(picloud_profile)
         db.session.add(picloud_account)
         db.session.commit()
-        token = generate_confirmation_token('testpicloud@picloud.com')
+        token = generate_token('testpicloud@picloud.com')
         self.assertFalse(confirm_token(token, -1))
 
 if __name__ == '__main__':

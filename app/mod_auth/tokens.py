@@ -9,7 +9,7 @@ from itsdangerous import URLSafeSerializer
 from flask import current_app
 
 
-def generate_confirmation_token(email):
+def generate_token(email):
     """
     generates a confirmation token for the user to click on to confirm their token
     the email will be encoded in the token
