@@ -32,7 +32,6 @@ def login():
                 # todo: dashboard redirect
                 # redirect to dashboard
                 # return redirect(url_for("", username=picloud_user.username))
-                print("Login success")
             # flash error message
             flash(message="Invalid email or password", category="error")
     return render_template("auth/login.html", login_form=login_form)
@@ -135,7 +134,7 @@ def forgot_password():
     return render_template("auth/recover_password.html", recover_password_form=recover_password_form)
 
 
-@auth.route("/recover-password/<token>")
+@auth.route("/recover-password/<token>", methods=["POST", "GET"])
 def recover_password(token):
     """
     Recover password route which will allow user to change their password. will perform a check on the
@@ -154,11 +153,24 @@ def recover_password(token):
 
     # if email is not valid
     if not email:
+        # flash a message and redirect to login
         flash(message="The confirmation link has expired or is invalid", category="error")
+        return redirect(url_for("auth.login"))
+
     elif picloud_user.email == email:
-        # display template to change their email account
-        
-        return render_template("auth/change_password.html", change_password_form=change_password_form)
+        if request.method == "POST":
+
+            if change_password_form.validate_on_submit():
+                # change the password
+                picloud_user.password_hash = change_password_form.password_field_1.data
+
+                db.session.add(picloud_user)
+                db.session.commit()
+
+                flash(message="Password has been reset", category="success")
+                return render_template("auth/change_password.html",
+                                       change_password_form=change_password_form)
+
     return render_template("auth/change_password.html", change_password_form=change_password_form)
 
 
