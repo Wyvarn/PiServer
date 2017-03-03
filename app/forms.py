@@ -27,7 +27,7 @@ class RegisterForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
     password = PasswordField(validators=[DataRequired(),
                                          EqualTo("verify_password", message="Passwords must match"),
-                                         Length(min=8, max=15)])
+                                         Length(min=8, max=20)])
     verify_password = PasswordField(validators=[DataRequired()])
     accept_terms = BooleanField()
     register_button = SubmitField("REGISTER")
@@ -72,5 +72,19 @@ class RecoverPasswordForm(FlaskForm):
         # if the email is None, return false and append errors
         self.email.errors.append("Email does not exist")
         return False
+
+
+class ChangePasswordForm(FlaskForm):
+    """
+    change password form that allows users to change their passwords
+    """
+    email = StringField(validators=[DataRequired(), Email()])
+    password_field_1 = PasswordField(validators=[DataRequired(),
+                                                 EqualTo("password_field_2",
+                                                         message="Passwords must match"),
+                                                 Length(min=8, max=20)]
+                                     )
+    password_field_2 = PasswordField(validators=[DataRequired()])
+    change_password_btn = SubmitField("CHANGE PASSWORD")
 
 # todo: add contact form

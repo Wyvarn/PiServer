@@ -1,6 +1,6 @@
 import unittest
 from tests import BaseTestCase
-from app.forms import LoginForm, RegisterForm, RecoverPasswordForm
+from app.forms import LoginForm, RegisterForm, RecoverPasswordForm, ChangePasswordForm
 
 
 class TestLoginForm(BaseTestCase):
@@ -115,6 +115,43 @@ class TestRecoverPassword(BaseTestCase):
         """>>> Test that recover password form validates an existent email address"""
         form = RecoverPasswordForm(email="picloudman@picloud.com")
         self.assertTrue(form.validate_form())
+
+
+class TestChangePasswordForm(BaseTestCase):
+    """
+    Tests for changing password form
+    """
+
+    def test_validates_email(self):
+        """>>> Tests that the form validates email input"""
+        form = ChangePasswordForm(email="picloudman@picloud.com",
+                                  password_field_1="picloudawesome", password_field_2="picloudawesome")
+        self.assertTrue(form.validate())
+
+    def test_validates_empty_email_input(self):
+        """>>> Tests that empty email input is not validated"""
+        form = ChangePasswordForm(email="",
+                                  password_field_1="picloudawesome", password_field_2="picloudawesome")
+        self.assertFalse(form.validate())
+
+    def test_validates_invalid_email_input(self):
+        """>>> test that invalid email inputs are not validated"""
+        form = ChangePasswordForm(email="picloudman",
+                                  password_field_1="picloudawesome", password_field_2="picloudawesome")
+        self.assertFalse(form.validate())
+
+    def test_validates_password_fields_match(self):
+        """>>> test that the password fields match"""
+        form = ChangePasswordForm(email="picloudman@picloud.com",
+                                  password_field_1="picloudawesome", password_field_2="picloudawesome")
+        self.assertEqual(form.password_field_1.data, form.password_field_2.data)
+        self.assertTrue(form.validate())
+
+    def test_validates_password_fields_dont_match(self):
+        """>>> Test that the password fields do not match"""
+        form = ChangePasswordForm(email="picloudman@picloud.com",
+                                  password_field_1="picloudawesome", password_field_2="picloudawesome2")
+        self.assertFalse(form.validate())
 
 
 if __name__ == '__main__':

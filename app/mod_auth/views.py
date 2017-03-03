@@ -135,6 +135,28 @@ def forgot_password():
     return render_template("auth/recover_password.html", recover_password_form=recover_password_form)
 
 
+@auth.route("/recover-password/<token>")
+def recover_password(token):
+    """
+    Recover password route which will allow user to change their password. will perform a check on the
+     token to confirm that the email is indeed correct, then proceed to allow changing of their password
+    :param token: token from the email sent when user recovered password, will contain the email
+    :return: a redirect to login page once password has been reset
+    """
+    # extract the email from the token
+    email = confirm_token(token)
+
+    # get the user
+    picloud_user = PiCloudUserAccount.query.filter_by(email=email).first()
+
+    # if email is not valid
+    if not email:
+        flash(message="The confirmation link has expired or is invalid", category="error")
+    elif picloud_user.email == email:
+        # display template to change their email account
+        pass
+
+
 @auth.route("/confirm/<token>")
 @login_required
 def confirm_email(token):
