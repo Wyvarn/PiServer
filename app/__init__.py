@@ -58,20 +58,20 @@ def error_handlers(app):
 
     # Error handler for page not found
     @app.errorhandler(404)
-    def not_found():
-        return render_template('errorpages/404.html')
+    def page_not_found(e):
+        return render_template('errorpages/404.html'), 404
 
     @app.errorhandler(403)
-    def error_403():
-        return render_template("errorpages/403.html")
+    def forbidden_403(e):
+        return render_template("errorpages/403.html"), 403
 
-    @app.errorhandler(403)
-    def error_500():
-        return render_template("errorpages/500.html")
+    @app.errorhandler(410)
+    def resource_gone(e):
+        return render_template("errorpages/410.html"), 410
 
-    @app.errorhandler(400)
-    def not_found():
-        return render_template('errorpages/400.html')
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template("errorpages/500.html"), 500
 
 
 def register_blueprints(app):

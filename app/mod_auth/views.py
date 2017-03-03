@@ -148,19 +148,19 @@ def recover_password(token):
     # extract the email from the token
     email = confirm_token(token)
 
-    # get the user
-    picloud_user = PiCloudUserAccount.query.filter_by(email=email).first()
-
     # if email is not valid
     if not email:
         # flash a message and redirect to login
         flash(message="The confirmation link has expired or is invalid", category="error")
         return redirect(url_for("auth.login"))
 
-    elif picloud_user.email == email:
+    else:
         if request.method == "POST":
 
             if change_password_form.validate_on_submit():
+                # get the user
+                picloud_user = PiCloudUserAccount.query.filter_by(email=email).first()
+
                 # change the password
                 picloud_user.password_hash = change_password_form.password_field_1.data
 

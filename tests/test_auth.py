@@ -140,14 +140,17 @@ class AuthTestCases(BaseTestCase):
     def test_confirm_token_route_expired_token(self):
         """>>> Ensure use can not confirm account with expired token"""
         picloud_profile = PiCloudUserProfile(first_name="Test", last_name="PiCloud",
-                                          email="testpicloud@picloud.com")
+                                             email="testpicloud@picloud.com")
         picloud_account = PiCloudUserAccount(username="test", email=picloud_profile.email,
-                                          password="testpicloud", registered_on=datetime.now())
+                                             password="testpicloud", registered_on=datetime.now())
         db.session.add(picloud_profile)
         db.session.add(picloud_account)
         db.session.commit()
         token = generate_token('testpicloud@picloud.com')
         self.assertFalse(confirm_token(token, -1))
+
+    # todo: add tests for forgot password function
+
 
 if __name__ == '__main__':
     unittest.main()

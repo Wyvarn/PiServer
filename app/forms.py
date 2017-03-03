@@ -69,6 +69,7 @@ class RecoverPasswordForm(FlaskForm):
         user = PiCloudUserAccount.query.filter_by(email=self.email.data).first()
         if user:
             return True
+
         # if the email is None, return false and append errors
         self.email.errors.append("Email does not exist")
         return False

@@ -36,6 +36,6 @@ def confirm_token(token, expiration=7200):
             salt=current_app.config.get("SECURITY_PASSWORD_SALT")
         )
     except Exception as e:
-        print(e)
+        print("Confirm token error: ", e)
         return False
     return email
