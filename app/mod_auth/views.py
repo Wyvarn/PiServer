@@ -4,7 +4,7 @@ from datetime import datetime
 from app import db
 from flask_login import login_user, login_required, current_user, logout_user
 from app.models import PiCloudUserAccount, PiCloudUserProfile
-from app.forms import LoginForm, RegisterForm, RecoverPasswordForm
+from app.forms import LoginForm, RegisterForm, RecoverPasswordForm, ChangePasswordForm
 from app.mod_auth.tokens import generate_token, confirm_token
 from app.mod_auth.email import send_mail
 
@@ -143,6 +143,9 @@ def recover_password(token):
     :param token: token from the email sent when user recovered password, will contain the email
     :return: a redirect to login page once password has been reset
     """
+
+    change_password_form = ChangePasswordForm(request.form)
+
     # extract the email from the token
     email = confirm_token(token)
 
@@ -154,7 +157,9 @@ def recover_password(token):
         flash(message="The confirmation link has expired or is invalid", category="error")
     elif picloud_user.email == email:
         # display template to change their email account
-        pass
+        
+        return render_template("auth/change_password.html", change_password_form=change_password_form)
+    return render_template("auth/change_password.html", change_password_form=change_password_form)
 
 
 @auth.route("/confirm/<token>")
@@ -206,4 +211,4 @@ def logout():
     :return: redirect to home page
     """
     logout_user()
-    return redirect(url_for("home.home"))
+    return redirect(url_for("home.index"))
