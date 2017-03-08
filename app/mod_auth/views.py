@@ -28,12 +28,19 @@ def login():
 
                 # display a message
                 flash(message="Welcome back {}!".format(picloud_user.username), category="success")
+                print("User", picloud_user)
+                print("login success")
 
                 # todo: dashboard redirect
                 # redirect to dashboard
                 # return redirect(url_for("", username=picloud_user.username))
-            # flash error message
-            flash(message="Invalid email or password", category="error")
+
+            else:
+                # flash error message
+                flash(message="Invalid email or password", category="error")
+                print("User", picloud_user)
+                print("login failed")
+
     return render_template("auth/login.html", login_form=login_form)
 
 
@@ -59,7 +66,7 @@ def register():
                                                           last_name=register_form.last_name.data,
                                                           email=register_form.email.data,
                                                           accept_terms=register_form.accept_terms.data)
-                picloud_user_account = PiCloudUserAccount(password_hash=register_form.password.data,
+                picloud_user_account = PiCloudUserAccount(password=register_form.password.data,
                                                           email=register_form.email.data,
                                                           username=register_form.email.data,
                                                           registered_on=datetime.now(),
@@ -152,6 +159,7 @@ def recover_password(token):
     if not email:
         # flash a message and redirect to login
         flash(message="The confirmation link has expired or is invalid", category="error")
+        print("recover_password: Email is not valid", email)
         return redirect(url_for("auth.login"))
 
     else:
@@ -168,8 +176,11 @@ def recover_password(token):
                 db.session.commit()
 
                 flash(message="Password has been reset", category="success")
+                print("Password reset successfully")
                 return render_template("auth/change_password.html",
                                        change_password_form=change_password_form)
+            else:
+                flash(message="Password has been reset", category="error")
 
     return render_template("auth/change_password.html", change_password_form=change_password_form)
 

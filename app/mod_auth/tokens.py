@@ -29,7 +29,7 @@ def confirm_token(token, expiration=7200):
     :return: the user email
     :rtype: str
     """
-    serializer = URLSafeSerializer(current_app.config.get("SECRET+KEY"))
+    serializer = URLSafeSerializer(current_app.config.get("SECRET_KEY"))
     try:
         email = serializer.loads(
             token,
