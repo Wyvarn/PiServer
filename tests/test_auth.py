@@ -1,3 +1,11 @@
+"""
+Tests for authentication module. These tests are split 3 ways in order to ensure each function of
+authentication is working as expected.
+Each is classified into a class in order to isolate the tests and check whether Login authentication
+works as it should as compared to Register authentication and as well as Recover password authentication
+Makes is more readable and cleaner
+For functional tests (how all these separated units work together) refer to test_functional.py file
+"""
 import unittest
 from datetime import datetime
 from flask_login import current_user
@@ -7,20 +15,15 @@ from app.mod_auth.tokens import generate_token, confirm_token
 from app import db
 
 
-class AuthTestCases(BaseTestCase):
+class LoginAuthTestCases(BaseTestCase):
     """
-    Auth test cases
+    Login test cases
     """
 
     def test_login_page_loads(self):
         """>>> Test the login page loads"""
         response = self.client.get("auth/login")
         self.assertIn(b"login", response.data)
-
-    def test_register_account_page_loads(self):
-        """>>> Test that the register account page loads"""
-        response = self.client.get("auth/register")
-        self.assertIn(b"Register", response.data)
 
     def test_picloud_login(self):
         """>>> Test that the correct login data logs in the user"""
@@ -49,6 +52,33 @@ class AuthTestCases(BaseTestCase):
         self.assertTrue(response.status_code == 200)
         self.assertIn(b'Please login', response.data)
 
+    def test_get_picloud_user_by_id(self):
+        """>>> Ensure that the id is correct for the current logged in user"""
+        with self.client:
+            self.login()
+            self.assertTrue(current_user.user_profile_id == 1)
+            self.assertFalse(current_user.get_id == 20)
+
+    def test_validate_invalid_password(self):
+        """>>> Test to ensure user can not log in with an invalid password"""
+        with self.client:
+            response = self.client.post("auth/login", data=dict(
+                email='picloudman@picloud.com',
+                password='picloudman'
+            ), follow_redirects=True)
+            self.assertIn(b"Invalid email and/or password", response.data)
+
+
+class RegisterAuthTestCases(BaseTestCase):
+    """
+    Register page test cases
+    """
+
+    def test_register_account_page_loads(self):
+        """>>> Test that the register account page loads"""
+        response = self.client.get("auth/register")
+        self.assertIn(b"Register", response.data)
+
     def test_picloud_registration(self):
         """>>> Test that a new user registration behaves as expected"""
         # todo: change redirects to True
@@ -67,23 +97,6 @@ class AuthTestCases(BaseTestCase):
             self.assertTrue(picloud_user_account.get_id)
             self.assertTrue(picloud_user_account.email == 'picloudman@picloud.com')
             self.assertFalse(picloud_user_account.admin)
-
-    def test_get_picloud_user_by_id(self):
-        """>>> Ensure that the id is correct for the current logged in user"""
-        with self.client:
-            response = self.login()
-            print(current_user)
-            self.assertTrue(current_user.user_profile_id == 1)
-            self.assertFalse(current_user.get_id == 20)
-
-    def test_validate_invalid_password(self):
-        """>>> Test to ensure user can not log in with an invalid password"""
-        with self.client:
-            response = self.client.post("auth/login", data=dict(
-                email='picloudman@picloud.com',
-                password='picloudman'
-            ), follow_redirects=True)
-            self.assertIn(b"Invalid email and/or password", response.data)
 
     def test_registered_on_defaults_to_datetime(self):
         """>>> Ensure that the registered_on date is a datetime object"""
@@ -149,7 +162,11 @@ class AuthTestCases(BaseTestCase):
         token = generate_token('testpicloud@picloud.com')
         self.assertFalse(confirm_token(token, -1))
 
-    # todo: add tests for forgot password function
+
+class RecoverPasswordAuthTestCases(BaseTestCase):
+    """
+    Recover Password test cases
+    """
 
 
 if __name__ == '__main__':
