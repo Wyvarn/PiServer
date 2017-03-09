@@ -10,6 +10,7 @@ __pycache__/
 instructions.md
 # vagrant
 .vagrant/
+static/node_modules
 
 # Distribution / packaging
 .Python
