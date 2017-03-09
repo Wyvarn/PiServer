@@ -115,7 +115,7 @@ class PiCloudUserAccount(db.Model, UserMixin):
     confirmed_on = Column(DateTime, nullable=True)
 
     user_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
-    user_profile_id = Column(Integer, ForeignKey("user_profile.id"))
+    user_profile_id = Column(Integer, ForeignKey(PiCloudUserProfile.id))
     user_profile = relationship(PiCloudUserProfile)
 
     def get_id(self):
