@@ -3,7 +3,7 @@ This will handle media files that are in the media directory if the Pi
 """
 from . import media
 from getpass import getuser
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, current_app
 import os
 
 
@@ -15,7 +15,12 @@ def view_media(drive):
     :return: view template for files in the media file
     """
     drive_folders = os.listdir("/media/{}/{}".format(getuser(), drive))
-    return render_template("media/media.html", drive_name=drive, drive=drive_folders)
+    context = {
+        "drive_folders": drive_folders,
+        "drive_name": drive
+    }
+
+    return render_template("media/media.html", **context)
 
 
 @media.route("<drive_name>/<folder_or_file>")
@@ -39,7 +44,7 @@ def view_folder_in_drive(drive_name, folder_or_file):
 
 
 @media.route("<drive_name>/<file>")
-def view_file_in_drive(drive_name,  file):
+def view_file_in_drive(drive_name, file):
     """
     Views files in the drive
     :return: 

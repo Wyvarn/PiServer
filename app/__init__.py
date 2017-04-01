@@ -6,12 +6,12 @@ from celery import Celery
 from flask_mail import Mail
 
 
-
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "auth.login"
 db = SQLAlchemy()
 mail = Mail()
+
 
 # create global instance of celery and delay its configuration until create_app is initialized
 celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
