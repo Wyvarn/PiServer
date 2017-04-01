@@ -35,13 +35,13 @@ def view_folder_in_drive(drive_name, folder_or_file):
         return render_template("media/media_dir.html", drive_name=drive_name, drive=folders)
 
     # if not a folder then it is obviously a file :D
-    return redirect(url_for("media.view_file_in_drive", drive_name=drive_name, folder=drive_name,
-                            file=folder_or_file))
+    return redirect(url_for("media.view_file_in_drive", drive_name=drive_name, file=folder_or_file))
 
 
-@media.route("<drive_name>/<folder>/<file>")
-def view_file_in_drive(drive_name, folder, file):
+@media.route("<drive_name>/<file>")
+def view_file_in_drive(drive_name,  file):
     """
     Views files in the drive
     :return: 
     """
+    return "file"

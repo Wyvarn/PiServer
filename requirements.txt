@@ -9,14 +9,17 @@ codacy-coverage==1.3.6
 codecov==2.0.5
 coverage==4.3.4
 Flask==0.12
+Flask-AutoIndex==0.6
 Flask-Login==0.4.0
 Flask-Mail==0.9.1
 Flask-Migrate==2.0.3
 Flask-Redis==0.3.0
 Flask-Script==2.0.5
+Flask-Silk==0.2
 Flask-SQLAlchemy==2.1
 Flask-Testing==0.6.1
 Flask-WTF==0.14.2
+future==0.16.0
 gunicorn==19.7.0
 itsdangerous==0.24
 Jinja2==2.9.4
