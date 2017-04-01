@@ -4,7 +4,7 @@
     <div>
         <h1> Home </h1>
     {% for med in media %}
-        <a href="{{ url_for('') }}">{{ med }}</a>
+        <a href="{{ url_for('media.view_media', drive=med) }}">{{ med }}</a>
     {% endfor %}
     </div>
 {% endblock %}
