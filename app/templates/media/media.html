@@ -10,7 +10,7 @@
                 {% for folder in drive %}
                     <li>
                         <a href="{{ url_for('media.view_folder_in_drive', drive_name=drive_name,
-                            folder=folder) }}">{{ folder }}
+                            folder_or_file=folder) }}">{{ folder }}
                         </a>
                 </li>
                 {% endfor %}
