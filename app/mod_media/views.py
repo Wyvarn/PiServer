@@ -26,17 +26,22 @@ def view_folder_in_drive(drive_name, folder_or_file):
     :param drive_name: the name of the connected drive
     :return: view of the folder or the file 
     """
-    root_path = "/media/{}/{}/{}".format(getuser(), drive_name, folder_or_file)
+    root_path = "media/{}/{}/{}".format(getuser(), drive_name, folder_or_file)
 
     # perform a check to determine if the folder is a folder or a file
     if os.path.isdir(root_path):
         # view the directory
         folders = os.listdir(root_path)
-        return render_template("media/media.html", drive_name=drive_name, drive=folders)
+        return render_template("media/media_dir.html", drive_name=drive_name, drive=folders)
 
-    elif os.path.isfile(root_path):
-        # view the file
-        file = os.open(root_path, flags=0)
-        return render_template("media/media.html", drive_name=drive_name, drive=file)
+    # if not a folder then it is obviously a file :D
+    return redirect(url_for("media.view_file_in_drive", drive_name=drive_name, folder=drive_name,
+                            file=folder_or_file))
 
-    return render_template("media/media.html", drive_name=drive_name, drive="")
+
+@media.route("<drive_name>/<folder>/<file>")
+def view_file_in_drive(drive_name, folder, file):
+    """
+    Views files in the drive
+    :return: 
+    """
