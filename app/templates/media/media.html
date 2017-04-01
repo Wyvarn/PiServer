@@ -3,12 +3,18 @@
 {% block content %}
     <div>
         <h1> {{ drive_name }} </h1>
-        {% if folders| length == 0 %}
+        {% if drive | length == 0 %}
             <p>No Folders or files to display</p>
         {% else %}
-            {% for folder in folders %}
-                <a>{{ folder }}</a>
-            {% endfor %}
+            <ol>
+                {% for folder in drive %}
+                    <li>
+                        <a href="{{ url_for('media.view_folder_in_drive', drive_name=drive_name,
+                            folder=folder) }}">{{ folder }}
+                        </a>
+                </li>
+                {% endfor %}
+            </ol>
         {% endif %}
     </div>
 {% endblock %}

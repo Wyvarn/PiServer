@@ -1,4 +1,5 @@
 import os
+import getpass
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,6 +17,7 @@ class Config(object):
     CSRF_ENABLE = True
     CSRF_SESSION_KEY = os.environ.get("CSRF_SESSION_KEY")
     DEBUG = False
+    USER = getpass.getuser()
     CSRF_ENABLED = True
     THREADS_PER_PAGE = 2
     DATABASE_CONNECT_OPTIONS = {}

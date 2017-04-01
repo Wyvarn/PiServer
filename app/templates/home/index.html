@@ -3,8 +3,13 @@
 {% block content %}
     <div>
         <h1> Home </h1>
-    {% for med in media %}
-        <a href="{{ url_for('media.view_media', drive=med) }}">{{ med }}</a>
-    {% endfor %}
+        <p>Connected Drives</p>
+        <ol>
+            {% for med in media %}
+                <li>
+                    <a href="{{ url_for('media.view_media', drive=med) }}">{{ med }}</a>
+                </li>
+            {% endfor %}
+        </ol>
     </div>
 {% endblock %}
