@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
-{% block container %}
+{% block content %}
     <div>
         <h1> Home </h1>
+    {% for med in media %}
+        <a href="{{ url_for('') }}">{{ med }}</a>
+    {% endfor %}
     </div>
 {% endblock %}

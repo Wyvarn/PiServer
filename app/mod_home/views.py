@@ -1,5 +1,6 @@
 from . import home
 from flask import render_template, redirect, flash, request
+import os
 
 
 @home.route("")
@@ -10,7 +11,8 @@ def index():
     Main view, or home page of the application
     :return: renders home page template
     """
-    return render_template("home/index.html")
+    media = os.listdir("/media/")
+    return render_template("home/index.html", media=media)
 
 
 @home.route("contact")

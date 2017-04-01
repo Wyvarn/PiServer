@@ -6,10 +6,10 @@ from app.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationSta
     GoogleAccount, FacebookAccount, TwitterAccount
 from flask_migrate import MigrateCommand, Migrate
 
+
 cov = None
 if os.environ.get("FLASK_COVERAGE"):
     import coverage
-
     # this will start running all the modules inside app, to check if all the applicaiton is being
     # sufficiently tested
     cov = coverage.coverage(branch=True, include="app/*")
