@@ -4,14 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from celery import Celery
 from flask_mail import Mail
-
+import rollbar
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "auth.login"
 db = SQLAlchemy()
 mail = Mail()
-
 
 # create global instance of celery and delay its configuration until create_app is initialized
 celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
@@ -43,6 +42,8 @@ def create_app(config_name):
     # initialize flask mail
     mail.init_app(app)
 
+    request_handlers(app, db)
+
     # register error pages and blueprints
     error_handlers(app)
     register_blueprints(app)
@@ -73,6 +74,25 @@ def error_handlers(app):
     @app.errorhandler(500)
     def internal_server_error(e):
         return render_template("errorpages/500.html"), 500
+
+
+def request_handlers(picloud_app, picloud_db):
+    """
+    Handles requests sent to the application, Requests will mostly be first request sent
+    and before request sent
+    :param picloud_app: the api cloud application
+    :param picloud_db: the pi cloud database
+    """
+
+    @picloud_app.before_first_request
+    def before_first_request():
+        """
+        we initialize Rollbar before first request
+        :return:
+        """
+
+        # initialize rollbar
+        rollbar.init(picloud_app.config.get("ROLLBAR_TOKEN"))
 
 
 def register_blueprints(app):
