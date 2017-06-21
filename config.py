@@ -23,8 +23,8 @@ class Config(object):
     DATABASE_CONNECT_OPTIONS = {}
     CELERY_BROKER_URL = os.environ.get("REDIS_SERVER_URL")
     CELERY_RESULT_BACKEND = os.environ.get("REDIS_SERVER_URL")
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
-    SECURITY_PASSWORD_SALT = os.environ["SECURITY_PASSWORD_SALT"]
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # mail settings
@@ -34,12 +34,12 @@ class Config(object):
     MAIL_USE_SSL = True
 
     # gmail authentication
-    MAIL_USERNAME = os.environ['APP_MAIL_USERNAME']
-    MAIL_PASSWORD = os.environ['APP_MAIL_PASSWORD']
+    MAIL_USERNAME = os.environ.get('APP_MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('APP_MAIL_PASSWORD')
 
-    MAIL_DEFAULT_SENDER = os.environ["MAIL_DEFAULT_SENDER"]
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
 
-    ROLLBAR_TOKEN = os.environ["ROLLBAR_TOKEN"]
+    ROLLBAR_TOKEN = os.environ.get("ROLLBAR_TOKEN")
 
     @staticmethod
     def init_app(app):

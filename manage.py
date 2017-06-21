@@ -2,14 +2,21 @@ from flask_script import Server, Manager, Shell
 import os
 from datetime import datetime
 from app import create_app, db
-from app.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation, \
-    GoogleAccount, FacebookAccount, TwitterAccount
 from flask_migrate import MigrateCommand, Migrate
+from click import echo, style
 
+# import environment variables from .env file
+if os.path.exists(".env"):
+    echo(style(text=">>>> Importing environment variables", fg="green", bold=True))
+    for line in open(".env"):
+        var = line.strip().split("=")
+        if len(var) == 2:
+            os.environ[var[0]] = var[1]
 
 cov = None
 if os.environ.get("FLASK_COVERAGE"):
     import coverage
+
     # this will start running all the modules inside app, to check if all the applicaiton is being
     # sufficiently tested
     cov = coverage.coverage(branch=True, include="app/*")
@@ -33,17 +40,7 @@ def make_shell_context():
     :return: A dictionary with the variables that will be in the shell context
     :rtype: dict
     """
-    return dict(
-        app=app,
-        db=db,
-        PiCloudUserAccount=PiCloudUserAccount,
-        PiCloudUserProfile=PiCloudUserProfile,
-        AsyncOperationStatus=AsyncOperationStatus,
-        AsyncOperation=AsyncOperation,
-        GoogleAccount=GoogleAccount,
-        FacebookAccount=FacebookAccount,
-        TwitterAccount=TwitterAccount
-    )
+    return dict(app=app, db=db)
 
 
 # add the commands that will be used in the application
@@ -96,7 +93,7 @@ def init_async_values():
     """
     Initializes the database with sensible defaults that will be used once the application is created
     """
-
+    from app.models import AsyncOperationStatus
     # the values to insert into each row
     async_ops_values = {
         "row1": (1, "pending"),
@@ -121,6 +118,7 @@ def create_admin():
     """
     manager command to create an admin
     """
+    from app.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation, GoogleAccount, FacebookAccount, TwitterAccount
     picloud_profile = PiCloudUserProfile(first_name="picloud", last_name="admin",
                                          email="picloudadmin@picloud.com", accept_terms=True)
 
@@ -131,6 +129,7 @@ def create_admin():
     db.session.add(picloud_profile)
     db.session.add(piclouduser_account)
     db.session.commit()
+
 
 if __name__ == "__main__":
     manager.run()

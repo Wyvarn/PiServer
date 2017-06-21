@@ -1,10 +1,12 @@
-from flask import render_template, Flask
-from config import config, Config
+from flask import render_template, Flask, got_request_exception
+from config import config
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from celery import Celery
 from flask_mail import Mail
 import rollbar
+import os
+import jinja2
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -13,7 +15,35 @@ db = SQLAlchemy()
 mail = Mail()
 
 # create global instance of celery and delay its configuration until create_app is initialized
-celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
+celery = Celery(__name__, broker=os.environ.get("CELERY_BROKER_URL"))
+
+
+class PiCloudApp(Flask):
+    """
+    This allows us to separate templates and static files by blueprints
+    also allows for a much cleaner design, even though we can still separate the template
+    and resource files by blueprints without this pattern, this servers as an easier
+     approach when designing the application
+    """
+
+    def __init__(self):
+        """
+        jinja_loader object (a FileSystemLoader pointing to the global templates folder)
+        is being replaced with a ChoiceLoader object that will first search the normal
+        FileSystemLoader and then check a PrefixLoader that we create
+        """
+        Flask.__init__(self, __name__, template_folder="templates", static_folder="static")
+        self.jinja_loader = jinja2.ChoiceLoader([
+            self.jinja_loader,
+            jinja2.PrefixLoader({}, delimiter=".")
+        ])
+
+    def create_global_jinja_loader(self):
+        return self.jinja_loader
+
+    def register_blueprint(self, blueprint, **options):
+        Flask.register_blueprint(self, blueprint, **options)
+        self.jinja_loader.loaders[1].mapping[blueprint.name] = blueprint.jinja_loader
 
 
 def create_app(config_name):
@@ -25,7 +55,7 @@ def create_app(config_name):
     :param config_name: The configuration to use, either Testing, Production, Development, found in config.py
     :return: A new application WSGI
     """
-    app = Flask(__name__, template_folder="templates", static_folder="static")
+    app = PiCloudApp()
 
     # app configurations, considering config is a dictionary, we pass in the key that we will receive
     app.config.from_object(config[config_name])
@@ -92,10 +122,20 @@ def request_handlers(picloud_app, picloud_db):
         """
 
         # initialize rollbar
-        rollbar.init(picloud_app.config.get("ROLLBAR_TOKEN"))
+        rollbar.init(
+            picloud_app.config.get("ROLLBAR_TOKEN"),
+            # server root directory, makes tracebacks prettier
+            root=os.path.dirname(os.path.realpath(__file__)),
+            # flask already sets up config
+            allow_logging_basic_config=False
+        )
+        rollbar.report_message('Rollbar is configured correctly')
+
+        # send exceptions from `app` to rollbar, using flask's signal system.
+        got_request_exception.connect(rollbar.contrib.flask.report_exception, picloud_app)
 
 
-def register_blueprints(app):
+def register_blueprints(app_):
     """
     Registers all the blueprints in the application
     Whenever a new module is created, ensure that it is registered here for it to work
@@ -107,8 +147,8 @@ def register_blueprints(app):
     from app.mod_api import api
     from app.mod_media import media
 
-    app.register_blueprint(media)
-    app.register_blueprint(auth)
-    app.register_blueprint(home)
-    app.register_blueprint(dashboard)
-    app.register_blueprint(api)
+    app_.register_blueprint(media)
+    app_.register_blueprint(auth)
+    app_.register_blueprint(home)
+    app_.register_blueprint(dashboard)
+    app_.register_blueprint(api)
