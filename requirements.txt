@@ -26,7 +26,6 @@ kombu==4.0.2
 Mako==1.0.6
 MarkupSafe==0.23
 packaging==16.8
-psycopg2==2.6.2
 py==1.4.32
 pyparsing==2.1.10
 pytest==3.0.6
