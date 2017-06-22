@@ -11,7 +11,7 @@ Upload data directly to your hard drive from wherever!
 
 ## Running the app
 
-This application is best run in a VM, so please ensure you have [Vagrant](https://www.vagrantup.com/) installed. A VM is used to ensure there is a level playing field for all developers when running and creating the application.
+This application is best run in a VM, so please ensure you have [Vagrant](https://www.vagrantup.com/) installed. A VM is used to ensure there is a level playing field for all developers when running and creating the application. Although this is a nice to have, another setup invovles having docker installed, which is what the application has been built on top of.
 
 You will find a vagrant file and a provision script which will contain all necessary tools for the VM. The VM used is `ubuntu/trusty64`.
 
@@ -25,27 +25,51 @@ $ vagrant ssh
 ```
 > logs you into the VM
 
+Once you are logged in you will already have all the necessary tools setup to run the application. This includes docker and docker compose.
+
+
 ``` sh
 $ cd /vagrant
-$ . venv/bin/activate
+$ docker-compose build
 ```
-> get into the shared directory and activate the virtual environment
+
+> get into the shared directory and run docker compose command which will build the containers from the images already setup in the directories
 
 And that is it, now you can run the application.
 
 ``` sh
-$ python manage.py runserver
+$ docker-compose up
 ```
+>  This will run the multi container application in the foreground and you should be able to see the output in your console
 
 ## Tests
 
-Running tests can be done with:
+Running tests can be done within the separate directories. The major setups are client and server. 
+
+For running server tests
 
 ``` sh
-$ python manage.py test
+# first stop the docker-compose up command, if it is still running with CTRL^C
+$ cd server
+$ pip install -r requirements.txt
+(venv) $ python manage.py test
 ```
 > Will run all the tests and print a coverage report
 
 The coverage reports will be printed to stdout and both HTML and XML reports will be generated.
+
+The same applies for client side tests
+
+```bash
+$ cd client
+$ npm install
+# if using yarn
+$ yarn install
+$ yarn test
+```
+> which will run tests in the __tests__ directory
+
+More information can be found in individual README.md files for both client and server
+
 
 Enjoy!
