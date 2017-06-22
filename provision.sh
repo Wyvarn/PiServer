@@ -51,3 +51,6 @@ echo -e "${CYAN} ==> Installing PostgresSQL Database and contrib packages"
 # -contrib package adds some functionality and utilities
 sudo apt-get install -y postgresql postgresql-contrib
 
+# install docker on guest OS
+wget -qO- https://get.docker.com/ | sh
+
