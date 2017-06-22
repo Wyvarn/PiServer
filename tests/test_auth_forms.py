@@ -1,6 +1,6 @@
 import unittest
 from tests import BaseTestCase
-from app.forms import LoginForm, RegisterForm, RecoverPasswordForm, ChangePasswordForm
+from app.mod_auth.forms import LoginForm, RegisterForm, RecoverPasswordForm, ChangePasswordForm
 
 
 class TestLoginForm(BaseTestCase):
