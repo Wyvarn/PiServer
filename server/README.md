@@ -15,3 +15,11 @@ docker build -t picloud:server:latest .
 ```
 
 This will start by pulling the base image from docker hub (if you do not have it) and then setup the application code to that container following the instructions from the Dockerfile
+
+Now you can run the container with
+
+```bash
+docker run -p 5000:5000 picloud:server
+```
+> This will run the app on port 5000 in the container and expose it on port 5000 on your machine
+

@@ -1,5 +1,4 @@
 FROM python:3.6.1-onbuild
-# FROM ubuntu:latest
 
 MAINTAINER Brian Lusina "lusinabrian@gmail.com"
 

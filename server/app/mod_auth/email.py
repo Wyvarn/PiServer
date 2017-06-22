@@ -1,6 +1,6 @@
 from flask_mail import Message
 from flask import current_app
-from server.app import mail
+from app import mail
 
 
 def send_mail(to, subject, template):

@@ -5,8 +5,7 @@ from flask import render_template, Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
-
-from server.config import config
+from config import config
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -129,11 +128,11 @@ def register_blueprints(app_):
     Whenever a new module is created, ensure that it is registered here for it to work
     :param app: Current flask application object
     """
-    from mod_auth import auth
-    from mod_home import home
-    from mod_dashboard import dashboard
-    from mod_api import api
-    from mod_media import media
+    from app.mod_auth import auth
+    from app.mod_home import home
+    from app.mod_dashboard import dashboard
+    from app.mod_api import api
+    from app.mod_media import media
 
     app_.register_blueprint(media)
     app_.register_blueprint(auth)

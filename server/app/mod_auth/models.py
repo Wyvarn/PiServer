@@ -9,8 +9,8 @@ import uuid
 from sqlalchemy.ext.declarative import declared_attr
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from server.app import Base
-from server.app import db, login_manager
+from app.models import Base
+from app import db, login_manager
 from datetime import datetime
 from json import loads
 
