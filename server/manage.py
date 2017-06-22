@@ -1,9 +1,11 @@
-from flask_script import Server, Manager, Shell
-import os
 from datetime import datetime
-from app import create_app, db
-from flask_migrate import MigrateCommand, Migrate
+
+import os
 from click import echo, style
+from flask_migrate import MigrateCommand, Migrate
+from flask_script import Server, Manager, Shell
+
+from server.app import create_app, db
 
 # import environment variables from .env file
 if os.path.exists(".env"):
@@ -93,7 +95,7 @@ def init_async_values():
     """
     Initializes the database with sensible defaults that will be used once the application is created
     """
-    from app.mod_auth.models import AsyncOperationStatus
+    from server.app import AsyncOperationStatus
     # the values to insert into each row
     async_ops_values = {
         "row1": (1, "pending"),
@@ -118,7 +120,7 @@ def create_admin():
     """
     manager command to create an admin
     """
-    from app.mod_auth.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation, GoogleAccount, FacebookAccount, TwitterAccount
+    from server.app import PiCloudUserAccount, PiCloudUserProfile
     picloud_profile = PiCloudUserProfile(first_name="picloud", last_name="admin",
                                          email="picloudadmin@picloud.com", accept_terms=True)
 

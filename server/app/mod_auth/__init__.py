@@ -4,4 +4,4 @@ from flask import Blueprint
 auth = Blueprint("auth", url_prefix="/auth", template_folder="auth", import_name=__name__)
 
 # made as a last import to avoid circular imports
-from app.mod_auth import views
+from server.app import views

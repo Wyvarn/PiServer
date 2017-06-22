@@ -1,12 +1,12 @@
 from . import auth
 from flask import render_template, redirect, url_for, current_app, session, request, flash
 from datetime import datetime
-from app import db
+from server.app import db
 from flask_login import login_user, login_required, current_user, logout_user
 from .models import PiCloudUserAccount, PiCloudUserProfile
 from .forms import LoginForm, RegisterForm, RecoverPasswordForm, ChangePasswordForm
-from app.mod_auth.tokens import generate_token, confirm_token
-from app.mod_auth.email import send_mail
+from server.app import generate_token, confirm_token
+from server.app import send_mail
 
 
 @auth.route('/login', methods=["POST", "GET"])

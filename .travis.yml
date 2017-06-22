@@ -1,24 +1,36 @@
-language: python
+sudo: required
+dist: trusty
+language: node_js
 
-sudo: false
+# specify the languages to use
+node_js:
+  - "5.0"
+  - "5.11"
+  - "6"
 
 python:
-  # - "2.7"
-  - "3.5"
-  - "3.6"
+  - 2.7
+  - 3.5
 
-install: pip install -r requirements.txt
+services:
+ - docker
 
+before_install:
+  - sudo apt-get -y install python3-pip python-dev
+  - sudo pip3 install -U setuptools
+  - sudo pip3 install -U virtualenvwrapper
+  - python3 -V
+  - pip3 -V
+
+# command to run tests
 script:
-  # - python manage.py init_async_values
-  - python manage.py test
-  - python-codacy-coverage -r coverage.xml
-  - codecov
-
-allow_failures:
-  python:
-    - "2.7"
+  - cd client && npm install
+  - npm run test
+  - cd ..
+  - cd server
+  - sudo pip3 install -r requirements.txt
+  - python3 manage.py test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
+  # todo: configure building images with docker compose and setting them up on docker hub

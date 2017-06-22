@@ -1,7 +1,6 @@
 from . import dashboard
-from flask import render_template, flash, request, redirect, url_for
-from app.mod_auth.models import PiCloudUserAccount, PiCloudUserProfile
-from flask_login import current_user, login_required
+from flask import render_template
+from flask_login import login_required
 
 
 @dashboard.route("<username>")

@@ -1,6 +1,8 @@
 import unittest
+
 from flask import current_app
-from tests import BaseTestCase
+
+from server.tests import BaseTestCase
 
 
 class TestConfigurationsCases(BaseTestCase):

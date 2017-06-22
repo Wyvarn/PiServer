@@ -1,11 +1,12 @@
-from flask import render_template, Flask, got_request_exception
-from config import config
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from celery import Celery
-from flask_mail import Mail
-import os
 import jinja2
+import os
+from celery import Celery
+from flask import render_template, Flask
+from flask_login import LoginManager
+from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+
+from server.config import config
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -128,11 +129,11 @@ def register_blueprints(app_):
     Whenever a new module is created, ensure that it is registered here for it to work
     :param app: Current flask application object
     """
-    from app.mod_auth import auth
-    from app.mod_home import home
-    from app.mod_dashboard import dashboard
-    from app.mod_api import api
-    from app.mod_media import media
+    from server.app import auth
+    from mod_home import home
+    from server.app import dashboard
+    from mod_api import api
+    from server.app import media
 
     app_.register_blueprint(media)
     app_.register_blueprint(auth)

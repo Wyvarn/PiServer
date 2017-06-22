@@ -8,11 +8,13 @@ For functional tests (how all these separated units work together) refer to test
 """
 import unittest
 from datetime import datetime
+
 from flask_login import current_user
-from tests import BaseTestCase
-from app.models import PiCloudUserAccount, PiCloudUserProfile
-from app.mod_auth.tokens import generate_token, confirm_token
-from app import db
+
+from server.app import PiCloudUserAccount, PiCloudUserProfile
+from server.app import db
+from server.app import generate_token, confirm_token
+from server.tests import BaseTestCase
 
 
 class LoginAuthTestCases(BaseTestCase):
