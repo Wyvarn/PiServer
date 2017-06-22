@@ -21,7 +21,12 @@ class Config(object):
     MEDIA_PATH = "/media/{}".format(getpass.getuser())
     CSRF_ENABLED = True
     THREADS_PER_PAGE = 2
+
+    # database setup
     DATABASE_CONNECT_OPTIONS = {}
+    POSTGRES_USER = os.environ.get("POSTGRES_USER")
+    POSTGRES_DB = os.environ.get("POSTGRES_DB")
+    POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
     CELERY_BROKER_URL = os.environ.get("REDIS_SERVER_URL")
     CELERY_RESULT_BACKEND = os.environ.get("REDIS_SERVER_URL")
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
@@ -37,7 +42,6 @@ class Config(object):
     # gmail authentication
     MAIL_USERNAME = os.environ.get('APP_MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('APP_MAIL_PASSWORD')
-
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
 
     @staticmethod
