@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from celery import Celery
 from flask_mail import Mail
-import rollbar
 import os
 import jinja2
 
@@ -120,19 +119,7 @@ def request_handlers(picloud_app, picloud_db):
         we initialize Rollbar before first request
         :return:
         """
-
-        # initialize rollbar
-        rollbar.init(
-            picloud_app.config.get("ROLLBAR_TOKEN"),
-            # server root directory, makes tracebacks prettier
-            root=os.path.dirname(os.path.realpath(__file__)),
-            # flask already sets up config
-            allow_logging_basic_config=False
-        )
-        rollbar.report_message('Rollbar is configured correctly')
-
-        # send exceptions from `app` to rollbar, using flask's signal system.
-        got_request_exception.connect(rollbar.contrib.flask.report_exception, picloud_app)
+        pass
 
 
 def register_blueprints(app_):

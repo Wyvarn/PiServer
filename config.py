@@ -39,8 +39,6 @@ class Config(object):
 
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
 
-    ROLLBAR_TOKEN = os.environ.get("ROLLBAR_TOKEN")
-
     @staticmethod
     def init_app(app):
         pass

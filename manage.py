@@ -93,7 +93,7 @@ def init_async_values():
     """
     Initializes the database with sensible defaults that will be used once the application is created
     """
-    from app.models import AsyncOperationStatus
+    from app.mod_auth.models import AsyncOperationStatus
     # the values to insert into each row
     async_ops_values = {
         "row1": (1, "pending"),
@@ -118,7 +118,7 @@ def create_admin():
     """
     manager command to create an admin
     """
-    from app.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation, GoogleAccount, FacebookAccount, TwitterAccount
+    from app.mod_auth.models import PiCloudUserAccount, PiCloudUserProfile, AsyncOperationStatus, AsyncOperation, GoogleAccount, FacebookAccount, TwitterAccount
     picloud_profile = PiCloudUserProfile(first_name="picloud", last_name="admin",
                                          email="picloudadmin@picloud.com", accept_terms=True)
 
