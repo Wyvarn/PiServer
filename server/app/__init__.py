@@ -129,11 +129,11 @@ def register_blueprints(app_):
     Whenever a new module is created, ensure that it is registered here for it to work
     :param app: Current flask application object
     """
-    from server.app import auth
+    from mod_auth import auth
     from mod_home import home
-    from server.app import dashboard
+    from mod_dashboard import dashboard
     from mod_api import api
-    from server.app import media
+    from mod_media import media
 
     app_.register_blueprint(media)
     app_.register_blueprint(auth)
