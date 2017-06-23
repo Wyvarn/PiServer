@@ -139,3 +139,49 @@ def register_blueprints(app_):
     app_.register_blueprint(home)
     app_.register_blueprint(dashboard)
     app_.register_blueprint(api)
+
+
+def set_logger(app, config_name):
+    """
+    Sets logging of error messages in case they occur in the application. This will send an email to
+    any of the administrators, or all of the administrators.
+    This should work when the application is in production
+    Will also record any errors to a log file
+    RotatingFileHandler is used to limit the number of logs to 1MB and limit the backup to 10 files
+    logging.formatter will enable us to format the log messages and get the line number that brought up the issue as
+    well as the stack trace.
+    :param app: current Flask app
+    :param config_name: the configuration to use this, normally in Production
+    """
+    import logging
+    from logging.handlers import SMTPHandler, RotatingFileHandler
+    MAIL_SERVER = app.config.get("MAIL_SERVER")
+
+    if config_name == "production":
+        if not app.debug and MAIL_SERVER != "":
+            credentials = None
+
+            MAIL_USERNAME = app.config.get("MAIL_USERNAME")
+            MAIL_PASSWORD = app.config.get("MAIL_PASSWORD")
+
+            if MAIL_USERNAME or MAIL_PASSWORD:
+                credentials = (MAIL_USERNAME, MAIL_PASSWORD)
+
+            mail_handler = SMTPHandler(mailhost=(MAIL_SERVER, app.config.get("MAIL_HOST")),
+                                       fromaddr="no-reply@" + MAIL_SERVER,
+                                       toaddrs=app.config.get("ADMINS"),
+                                       subject="PiCloud app failure",
+                                       credentials=credentials)
+            mail_handler.setLevel(logging.ERROR)
+            app.logger.addHandler(mail_handler)
+
+        if not app.debug and os.environ.get("HEROKU") is None:
+            # log file will be saved in the tmp directory
+            file_handler = RotatingFileHandler(filename="tmp/picloud.log", mode="a", maxBytes=1 * 1024 * 1024,
+                                               backupCount=10)
+            file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%('
+                                                        'lineno)d]'))
+            app.logger.setLevel(logging.INFO)
+            file_handler.setLevel(logging.INFO)
+            app.logger.addHandler(file_handler)
+            app.logger.info("PiCloud")

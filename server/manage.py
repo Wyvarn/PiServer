@@ -7,6 +7,8 @@ from flask_migrate import MigrateCommand, Migrate
 from flask_script import Server, Manager, Shell
 from app import create_app, db
 
+logger = logging.getLogger("PiCloud")
+
 # import environment variables from .env file
 if os.path.exists(".env"):
     echo(style(text=">>>> Importing environment variables", fg="green", bold=True))
