@@ -11,10 +11,10 @@ from datetime import datetime
 
 from flask_login import current_user
 
-from server.app import PiCloudUserAccount, PiCloudUserProfile
-from server.app import db
-from server.app import generate_token, confirm_token
-from server.tests import BaseTestCase
+from app.mod_auth.models import PiCloudUserAccount, PiCloudUserProfile
+from app import db
+from app.mod_auth.tokens import generate_token, confirm_token
+from tests import BaseTestCase
 
 
 class LoginAuthTestCases(BaseTestCase):
