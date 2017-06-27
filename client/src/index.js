@@ -3,8 +3,7 @@ import { render } from 'react-dom';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore'
-import './styles/css/index.css';
-import './styles/css/App.css';
+import './styles/sass/index.css';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
