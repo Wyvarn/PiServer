@@ -5,9 +5,9 @@
         <h1> Home </h1>
         <p>Connected Drives</p>
         <ol>
-            {% for med in media %}
+            {% for media in medias %}
                 <li>
-                    <a href="{{ url_for('media.view_media', drive=med) }}">{{ med }}</a>
+                    <a href="{{ url_for('media.view_media', drive_name=media) }}">{{ media }}</a>
                 </li>
             {% endfor %}
         </ol>

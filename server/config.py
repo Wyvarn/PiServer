@@ -18,9 +18,14 @@ class Config(object):
     CSRF_ENABLE = True
     CSRF_SESSION_KEY = os.environ.get("CSRF_SESSION_KEY")
     DEBUG = False
-    MEDIA_PATH = "/media/{}".format(getpass.getuser())
     CSRF_ENABLED = True
     THREADS_PER_PAGE = 2
+
+    # setup for media path to mount to host filesystem
+    PICLOUD_USER = os.environ.get("PICLOUD_USER", "picloud")
+    MEDIA_PATH = "/media/{}/"
+    LOCAL_MEDIA_PATH = MEDIA_PATH.format(getpass.getuser())
+    SERVER_MEDIA_PATH = MEDIA_PATH.format(PICLOUD_USER)
 
     # database setup
     DATABASE_CONNECT_OPTIONS = {}
@@ -89,7 +94,7 @@ class ProductionConfig(Config):
 # the default configuration will be development configuration, this is in case, we forget to set one
 config = {
     "testing": TestingConfig,
-    "development": DevelopmentConfig,
+    "develop": DevelopmentConfig,
     "production": ProductionConfig,
     "default": DevelopmentConfig
 }

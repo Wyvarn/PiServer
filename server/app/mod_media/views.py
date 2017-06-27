@@ -19,12 +19,12 @@ def view_media(drive_name):
             "drive": os.listdir("/media/{}/{}".format(getuser(), drive_name)),
             "drive_name": drive_name
         }
-        return render_template("media/media.html", **context)
+        return render_template("media.media.html", **context)
     except FileNotFoundError:
         context = {
             "drive_name": drive_name
         }
-        return render_template("media/media.html", **context)
+        return render_template("media.media.html", **context)
 
         # for root, dirs, files in os.walk("/media/{}/{}".format(getuser(), drive)):
         #     level = root.replace(drive, '').count(os.sep)
@@ -51,7 +51,7 @@ def view_folder_in_drive(drive_name, folder_or_file):
             folders=os.listdir(root_path),
             drive_name=drive_name
         )
-        return render_template("media/media_dir.html", **context)
+        return render_template("media.media_dir.html", **context)
     # if not a folder then it is obviously a file :D
     # return redirect(url_for("media.view_file_in_drive", drive_name=drive_name, file=folder_or_file))
 
@@ -62,4 +62,4 @@ def view_file_in_drive(drive_name, file):
     Views files in the drive
     :return: 
     """
-    return render_template("media/media_file.html", file=file)
+    return render_template("media.media_file.html", file=file)
