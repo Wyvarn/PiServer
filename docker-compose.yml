@@ -23,8 +23,7 @@ services:
       - "8000"
     volumes:
      - /usr/src/app/app/static
-    # command: /usr/bin/python manage.py runserver
-    # command: /usr/bin/supervisord
+     - /media/picloud/
     command: python manage.py runserver
     depends_on:
      - postgres
