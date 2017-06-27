@@ -2,7 +2,7 @@
 Home route, entry point of application
 """
 from . import home
-from flask import render_template, redirect, flash, request, current_app, jsonify
+from flask import redirect, request, current_app, jsonify
 import os
 
 
