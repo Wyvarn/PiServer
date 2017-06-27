@@ -3,11 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "prop-types": "^15.5.10",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.7"
+    "react-scripts": "1.0.7",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-immutable-state-invariant": "^2.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
