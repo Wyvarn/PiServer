@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import logo from '../images/logo.svg';
-import '../styles/css/App.css';
+import {Router, Route, withRouter} from 'react-router-dom';
+import createHistory from 'history/createBrowserHistory';
+import { connect } from 'react-redux';
+
+const history = createHistory();
+
 
 class App extends Component {
   render() {
@@ -10,12 +15,23 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+          <Router history={history}>
+              <div>
+
+              </div>
+          </Router>
       </div>
     );
   }
 }
 
-export default App;
+
+function mapStateToProps(state, ownProps){
+    return{
+        loading: state.ajaxCallsInProgress > 0
+    };
+}
+
+const container = connect(mapStateToProps)(App);
+
+export default withRouter(container);
