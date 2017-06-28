@@ -18,24 +18,31 @@ def index():
     :return: json response of files in /media/username path
     :rtype: dict
     """
+    # obtain the path to walk down
+    media_path_tree = current_app.config.get("MEDIA_PATH")
 
-    # check which current config we are running and mount to that file system
-    if os.environ.get("FLASK_CONFIG") == "develop":
-        media = os.listdir(current_app.config.get("LOCAL_MEDIA_PATH"))
-        # todo:
-        # classify the drives and files in the media/username directory into either files
-        # or directories, then group them into directories list or file list
-        # response should be something like
-        # {
-        #   dirs : [...]
-        #   files : [...]
-        # }
-        context = dict(medias=media)
-        return jsonify(**context)
+    # this will be the dict response we send out
+    context = {}
 
-    elif os.environ.get("FLASK_CONFIG") == "production":
-        media = os.listdir(current_app.config.get("SERVER_MEDIA_PATH"))
-        context = dict(medias=media)
-        return jsonify(**context)
+    # walk down the tree and retrieve files and directories
+    for dirpath, dirnames, filenames in os.walk(media_path_tree):
+        directories = create_create_full_paths(dirpath, dirnames)
+        files = create_create_full_paths(dirpath, filenames)
 
-    return jsonify(dict(message="No Drives mounted"))
+        # update the response dictionary
+        context["directories"] = directories
+        context["filenames"] = files
+
+    # return the unpacked dictionary response
+    return jsonify(**context)
+
+
+def create_create_full_paths(root_path, path_list):
+    """
+    Create paths to the given directories and filenames of the given
+    :param root_path to the directory or file
+    :param path_list list of filenames/directories
+    :return: List with the full path to the file or directory
+    :rtype: list
+    """
+    return list(map(lambda x: os.path.join(root_path, x), path_list))

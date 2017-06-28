@@ -23,9 +23,11 @@ class Config(object):
 
     # setup for media path to mount to host filesystem
     PICLOUD_USER = os.environ.get("PICLOUD_USER", "picloud")
-    MEDIA_PATH = "/media/{}/"
-    LOCAL_MEDIA_PATH = MEDIA_PATH.format(getpass.getuser())
-    SERVER_MEDIA_PATH = MEDIA_PATH.format(PICLOUD_USER)
+    ROOT_MEDIA_PATH = "/media/{}/"
+    if os.environ.get("FLASK_CONFIG") == "develop":
+        MEDIA_PATH = ROOT_MEDIA_PATH.format(getpass.getuser())
+    else:
+        MEDIA_PATH = ROOT_MEDIA_PATH.format(PICLOUD_USER)
 
     # database setup
     DATABASE_CONNECT_OPTIONS = {}
