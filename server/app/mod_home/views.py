@@ -4,6 +4,7 @@ Home route, entry point of application
 from . import home
 from flask import redirect, request, current_app, jsonify
 import os
+from collections import defaultdict
 
 
 @home.route("")
@@ -22,7 +23,7 @@ def index():
     media_path_tree = current_app.config.get("MEDIA_PATH")
 
     # this will be the dict response we send out
-    context = {}
+    context = defaultdict(list)
 
     # walk down the tree and retrieve files and directories
     for dirpath, dirnames, filenames in os.walk(media_path_tree):
@@ -30,8 +31,10 @@ def index():
         files = create_create_full_paths(dirpath, filenames)
 
         # update the response dictionary
-        context["directories"] = directories
-        context["filenames"] = files
+        if len(directories) > 0:
+            context["directories"].append(directories)
+        if len(files) > 0:
+            context["files"].append(files)
 
     # return the unpacked dictionary response
     return jsonify(**context)
@@ -39,9 +42,9 @@ def index():
 
 def create_create_full_paths(root_path, path_list):
     """
-    Create paths to the given directories and filenames of the given
+    Create paths to the given directories and file names of the given
     :param root_path to the directory or file
-    :param path_list list of filenames/directories
+    :param path_list list of file names/directories
     :return: List with the full path to the file or directory
     :rtype: list
     """
