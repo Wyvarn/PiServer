@@ -64,26 +64,30 @@ def index():
         for dirpath, dirnames, filenames in os.walk(full_path):
             # count the number of files and directories we have
             # and state the root directories
-
-            context["directory_tree"][key]["files"] += len(filenames)
+            context["directory_tree"][key]["files"] = []
+            context["directory_tree"][key]["file_num"] += len(filenames)
             context["directory_tree"][key]["dirs"] += len(dirnames)
 
-            # under each directory we list the files and sub directories available
+            # create keys for the directories we find at the top level
+            # this will allow us to go deeper into each directory
+            for top_level_dirs_or_files in os.listdir(dirpath):
+                if os.path.isdir(os.path.join(full_path, top_level_dirs_or_files)):
+                    context["directory_tree"][key][top_level_dirs_or_files] = {}
+                    # we can then traverse this top level directory adding the directory keys
+                    # and files to it
+                    traverse_tree(os.path.join(full_path, top_level_dirs_or_files))
 
-            directories = create_create_full_paths(dirpath, dirnames)
-            files = create_create_full_paths(dirpath, filenames)
+                # if what we find are just files, we add them to the list
+                context["directory_tree"][key]["files"].append(top_level_dirs_or_files)
 
-            # update the response dictionary
-            if len(directories) > 0:
-                context["dir"].append(directories)
-            if len(files) > 0:
-                context["f"].append(files)
+            directories = create_full_paths(dirpath, dirnames)
+            files = create_full_paths(dirpath, filenames)
 
     # return the unpacked dictionary response
     return jsonify(message="Media(s) mounted", success=True, **context)
 
 
-def create_create_full_paths(root_path, path_list):
+def create_full_paths(root_path, path_list):
     """
     Create paths to the given directories and file names of the given
     :param root_path to the directory or file
@@ -118,3 +122,25 @@ def get_total_dirs_and_files(root_path):
         file_num += len(filenames)
 
     return dir_num, file_num
+
+
+def traverse_tree(dir_path):
+    """
+    traverses the directory path, starting at the directory root and moving down obtaining
+    file names and directories
+    :param dir_path: directory to traverse
+    :return: information about this directory, whether it has files, other nested directories
+    """
+    result = defaultdict(list)
+
+    # first check if this directory has top level directories
+    # this will be used to indicate the keys to return
+    for paths in os.listdir(dir_path):
+        if os.path.isdir(paths):
+            result[paths] = {}
+        # else it is a file, thus add it to a list
+        result["files"].append(paths)
+
+    # we want to obtain files and directories and go deeper in these directories
+    for root_path, directories, filenames in os.walk(dir_path):
+        pass
