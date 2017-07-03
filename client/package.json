@@ -29,6 +29,7 @@
     "build-css": "node-sass-chokidar --include-path ./src/styles --include-path ./node_modules src/styles -o src/styles",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node-modules src/styles -o src/styles--watch --recursive",
     "test": "react-scripts test --env=jsdom",
+    "test:coverage":"npm test -- --coverage",
     "eject": "react-scripts eject"
   }
 }
