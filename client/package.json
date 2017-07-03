@@ -6,6 +6,7 @@
     "axios": "^0.16.2",
     "history": "^4.6.3",
     "node-sass-chokidar": "^0.0.3",
+    "npm-run-all": "^4.0.2",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
@@ -22,10 +23,11 @@
     "redux-mock-store": "^1.2.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "build-css":"node-sass-chokidar --include-path ./src/styles --include-path ./node_modules -o src/styles",
-    "watch-cass":"npm run build-css && node-sass-chokidar --include-path ./node-modules /src/styles -o src/styles --watch --recursive",
+    "start": "npm-run-all -p watch-css start-js",
+    "start-js": "react-scripts start",
+    "build": "npm-run build-css && react-scripts build",
+    "build-css": "node-sass-chokidar --include-path ./src/styles --include-path ./node_modules -o src/styles",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node-modules /src/styles -o src/styles --watch --recursive",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
