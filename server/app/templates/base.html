@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		{% include "head.html" %}
+	</head>
+    <body>
+        <div class="container">
+            <button id="menu-toggle" class="menu-toggle"><span>Menu</span></button>
+			<div id="theSidebar" class="sidebar">
+				<button class="close-button fa fa-fw fa-close"></button>
+				<div class="related">
+					<a href="{{ url_for('auth.login') }}">Login</a>
+				</div>
+			</div>
+            <div id="theGrid" class="main">
+                <section class="grid">
+                    {% block content %}
+
+                    {% endblock %}
+                </section>
+            </div>
+        </div>
+		{% include "scripts.html" %}
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <meta name="description" content="PiCloud, for viewing your hard drive contents from wherever" />
+    <meta name="keywords" content="folder, preview, picloud, raspberry pi cloud" />
+    <meta name="author" content="Wyvern" />
+    <script>
+        document.documentElement.className = 'js';
+        function browserCanUseCssVariables() {
+            return window.CSS && window.CSS.supports && window.CSS.supports('--fake-var', 0);
+        }
+        if (!browserCanUseCssVariables())
+            alert('Your browser does not support CSS Variables. Please use a modern browser to view this site.');
+    </script>
+    <title>PiCloud</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+  </body>
+</html>

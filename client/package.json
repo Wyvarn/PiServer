@@ -1,0 +1,35 @@
+{
+  "name": "picloud",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.16.2",
+    "history": "^4.6.3",
+    "node-sass-chokidar": "^0.0.3",
+    "npm-run-all": "^4.0.2",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "react-router-dom": "^4.1.1",
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0"
+  },
+  "devDependencies": {
+    "nock": "^9.0.13",
+    "react-scripts": "1.0.7",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-immutable-state-invariant": "^2.0.0",
+    "redux-mock-store": "^1.2.3"
+  },
+  "scripts": {
+    "start": "npm-run-all -p watch-css start-js",
+    "start-js": "react-scripts start",
+    "build": "npm-run build-css && react-scripts build",
+    "build-css": "node-sass-chokidar --include-path ./src/styles --include-path ./node_modules src/styles -o src/styles",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./node-modules src/styles -o src/styles--watch --recursive",
+    "test": "react-scripts test --env=jsdom",
+    "test:coverage":"npm test -- --coverage",
+    "eject": "react-scripts eject"
+  }
+}

@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
-# todo: add color, change echo colors
+# echo colors
+CYAN='\033[0;36m'
 
-echo "Setting Timezone & Locale to $3 & en_US.UTF-8"
+echo -e "${CYAN} ==> Setting Timezone & Locale to $3 & en_US.UTF-8"
 
 sudo ln -sf /usr/share/zoneinfo/$3 /etc/localtime
 sudo apt-get install -qq language-pack-en
 sudo locale-gen en_US
 sudo update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
 
-echo "Repair tty log message"
+echo -e "${CYAN} ==> Repair tty log message"
 sudo sed -i "/tty/!s/mesg n/tty -s \\&\\& mesg n/" /root/.profile
 
 # in order to avoid the message
@@ -25,23 +26,36 @@ apt-get update
 # apt-get update
 # apt-get install -y rabbitmq-server
 
-echo ">>> Installing Node and NPM"
+echo -e "${CYAN} ==> Installing Node and NPM for node modules"
 sudo apt-get install -y npm
 curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-echo ">>> Installing pip"
+echo -e "${CYAN} ==>  Installing pip Python packaging manager"
 sudo apt-get install -y python3-pip
 sudo apt-get install -y python-pip
 
-echo ">>> Installing virtualenv"
+echo -e "${CYAN} ==>  Installing virtualenv for Python Environments"
 sudo pip install virtualenv
 
 # echo ">>> Installing Nginx"
 # sudo apt-get install -y nginx
 
-echo ">>> Installing Git"
+echo -e "${CYAN} ==>  Installing Git for VCS"
 sudo apt-get -y install git
 
-echo ">>> Installing Redis"
-apt-get install -y redis-server
+echo -e "${CYAN} ==> Installing Redis Server"
+sudo apt-get install -y redis-server
+
+echo -e "${CYAN} ==> Installing PostgresSQL Database and contrib packages"
+# -contrib package adds some functionality and utilities
+sudo apt-get install -y postgresql postgresql-contrib
+
+# install docker on guest OS
+wget -qO- https://get.docker.com/ | sh
+
+# install docker compose
+curl -L https://github.com/docker/compose/releases/download/1.13.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
