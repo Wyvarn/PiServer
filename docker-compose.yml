@@ -8,9 +8,13 @@ services:
       - "3000:3000"
     expose:
       - "5000"
+    networks:
+      - frontend
     volumes:
       - /usr/src/app/
     command: npm run start
+    links:
+      - "server:picloud"
     depends_on:
       - server
 
@@ -23,26 +27,41 @@ services:
       - "8000"
     volumes:
      - /usr/src/app/app/static
-    # command: /usr/bin/python manage.py runserver
-    # command: /usr/bin/supervisord
+     - /media/picloud/
     command: python manage.py runserver
+    links:
+    	- "db:database"
     depends_on:
      - postgres
+    networks:
+      - backend
+      - frontend
 
   redis:
     restart: always
     build: ./redis
     depends_on:
       - server
+    networks:
+      - backend
 
   data:
     image: postgres:9.6
     volumes:
       - /var/lib/postgresql
     command: "true"
+    networks:
+      - backend
 
-  postgres:
+  db:
     restart: always
     build: ./postgresql
     ports:
       - "5432:5432"
+    networks:
+      - backend
+
+# define networks in which services will be visible to each other      
+networks:
+	frontend:
+	backend:      
