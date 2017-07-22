@@ -2,8 +2,8 @@ import unittest
 
 from werkzeug.security import check_password_hash
 
-from server.app import PiCloudUserAccount
-from server.tests import BaseTestCase
+from app.mod_auth.models import PiCloudUserAccount
+from tests import BaseTestCase
 
 
 class ModelTestCases(BaseTestCase):

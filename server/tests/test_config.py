@@ -2,7 +2,7 @@ import unittest
 
 from flask import current_app
 
-from server.tests import BaseTestCase
+from tests import BaseTestCase
 
 
 class TestConfigurationsCases(BaseTestCase):

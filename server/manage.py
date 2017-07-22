@@ -2,10 +2,12 @@ from datetime import datetime
 
 import os
 from click import echo, style
+import logging
 from flask_migrate import MigrateCommand, Migrate
 from flask_script import Server, Manager, Shell
-
 from app import create_app, db
+
+logger = logging.getLogger("PiCloud")
 
 # import environment variables from .env file
 if os.path.exists(".env"):
@@ -124,9 +126,11 @@ def create_admin():
     picloud_profile = PiCloudUserProfile(first_name="picloud", last_name="admin",
                                          email="picloudadmin@picloud.com", accept_terms=True)
 
-    piclouduser_account = PiCloudUserAccount(username="picloud", email=picloud_profile.email,
-                                             password="picloudman", registered_on=datetime.now(),
-                                             admin=True, confirmed=True, confirmed_on=datetime.now())
+    piclouduser_account = PiCloudUserAccount(
+        username="picloud", email=picloud_profile.email,
+        password="picloudman", registered_on=datetime.now(),
+        admin=True, confirmed=True, confirmed_on=datetime.now()
+    )
 
     db.session.add(picloud_profile)
     db.session.add(piclouduser_account)

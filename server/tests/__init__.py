@@ -1,9 +1,10 @@
 import unittest
+from app import create_app, db
+from app.mod_auth.models import PiCloudUserAccount, PiCloudUserProfile
 from flask_testing import TestCase
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
-from app.mod_auth.models import PiCloudUserAccount, PiCloudUserProfile
-from app import create_app, db
+
 
 
 class ContextTestCase(TestCase):
