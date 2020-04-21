@@ -16,7 +16,7 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
-    "nock": "^9.0.13",
+    "nock": "^9.6.1",
     "react-scripts": "1.0.7",
     "redux-devtools-extension": "^2.13.2",
     "redux-immutable-state-invariant": "^2.0.0",
