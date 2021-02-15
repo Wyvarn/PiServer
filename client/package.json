@@ -17,7 +17,7 @@
     "snyk": "^1.437.3"
   },
   "devDependencies": {
-    "nock": "^13.0.5",
+    "nock": "^13.0.7",
     "react-scripts": "4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-immutable-state-invariant": "^2.1.0",
