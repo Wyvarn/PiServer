@@ -14,7 +14,7 @@
     "react-router-dom": "^5.2.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.3.0",
-    "snyk": "^1.530.0"
+    "snyk": "^1.563.0"
   },
   "devDependencies": {
     "nock": "^13.0.10",
